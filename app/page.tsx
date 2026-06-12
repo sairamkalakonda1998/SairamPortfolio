@@ -380,58 +380,58 @@ export default function Home() {
       <motion.div className="pointer-events-none fixed inset-0 z-10" style={{ background: glow }} />
 
       <header className="fixed left-0 right-0 top-0 z-40 px-4 py-4 sm:px-8 sm:py-5 lg:px-10">
-        <nav className="mx-auto flex max-w-7xl items-center gap-3 rounded-full border border-white/10 bg-ink/48 px-3 py-3 backdrop-blur-2xl sm:px-4">
-          <a href="#hero" className="text-sm font-semibold tracking-wide text-pearl">
-            KS
-          </a>
-          <div className="hidden min-w-0 flex-1 items-center justify-center gap-6 px-1 text-sm text-haze sm:flex">
-            {["About", "Experience", "Projects", "Skills", "Contact"].map((item) => (
-              <a key={item} href={`#${item.toLowerCase()}`} className="shrink-0 transition hover:text-pearl">
-                {item}
-              </a>
-            ))}
-          </div>
-          <div className="relative ml-auto sm:hidden">
+        <nav className="mx-auto max-w-7xl rounded-[1.75rem] border border-white/10 bg-ink/48 px-3 py-3 backdrop-blur-2xl sm:flex sm:items-center sm:gap-3 sm:rounded-full sm:px-4">
+          <div className="flex items-center gap-3">
+            <a href="#hero" className="text-sm font-semibold tracking-wide text-pearl">
+              KS
+            </a>
+            <div className="hidden min-w-0 flex-1 items-center justify-center gap-6 px-1 text-sm text-haze sm:flex">
+              {["About", "Experience", "Projects", "Skills", "Contact"].map((item) => (
+                <a key={item} href={`#${item.toLowerCase()}`} className="shrink-0 transition hover:text-pearl">
+                  {item}
+                </a>
+              ))}
+            </div>
             <button
               type="button"
               onClick={() => setIsMobileNavOpen((open) => !open)}
               aria-expanded={isMobileNavOpen}
               aria-controls="mobile-navigation"
               aria-label="Toggle navigation menu"
-              className="grid size-9 place-items-center rounded-full border border-white/10 text-haze transition hover:border-white/24 hover:text-pearl"
+              className="ml-auto grid size-9 place-items-center rounded-full border border-white/10 text-haze transition hover:border-white/24 hover:text-pearl sm:hidden"
             >
               {isMobileNavOpen ? <X size={17} aria-hidden="true" /> : <Menu size={17} aria-hidden="true" />}
             </button>
-            {isMobileNavOpen && (
-              <motion.div
-                id="mobile-navigation"
-                initial={{ opacity: 0, y: -8, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.2, ease: premiumEase }}
-                className="absolute right-0 top-12 w-48 overflow-hidden rounded-2xl border border-white/12 bg-ink/95 p-2 shadow-lift backdrop-blur-2xl"
-              >
-                {["About", "Experience", "Projects", "Skills", "Contact"].map((item) => (
-                  <a
-                    key={item}
-                    href={`#${item.toLowerCase()}`}
-                    onClick={() => setIsMobileNavOpen(false)}
-                    className="block rounded-xl px-3 py-2.5 text-sm text-haze transition hover:bg-white/[0.06] hover:text-pearl"
-                  >
-                    {item}
-                  </a>
-                ))}
-              </motion.div>
-            )}
+            <a
+              href="https://www.linkedin.com/in/sairam-kalakonda/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Open LinkedIn profile"
+              className="grid size-9 place-items-center rounded-full border border-white/10 text-haze transition hover:border-white/24 hover:text-pearl"
+            >
+              <Linkedin size={16} aria-hidden="true" />
+            </a>
           </div>
-          <a
-            href="https://www.linkedin.com/in/sairam-kalakonda/"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Open LinkedIn profile"
-            className="grid size-9 place-items-center rounded-full border border-white/10 text-haze transition hover:border-white/24 hover:text-pearl"
-          >
-            <Linkedin size={16} aria-hidden="true" />
-          </a>
+          {isMobileNavOpen && (
+            <motion.div
+              id="mobile-navigation"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              transition={{ duration: 0.24, ease: premiumEase }}
+              className="mt-3 overflow-hidden border-t border-white/10 pt-2 sm:hidden"
+            >
+              {["About", "Experience", "Projects", "Skills", "Contact"].map((item) => (
+                <a
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  onClick={() => setIsMobileNavOpen(false)}
+                  className="block rounded-2xl px-3 py-2.5 text-sm text-haze transition hover:bg-white/[0.06] hover:text-pearl"
+                >
+                  {item}
+                </a>
+              ))}
+            </motion.div>
+          )}
         </nav>
       </header>
 
