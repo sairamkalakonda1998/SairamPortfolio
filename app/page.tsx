@@ -162,7 +162,7 @@ function Section({
   className?: string;
 }) {
   return (
-    <section id={id} className={`relative px-5 py-24 sm:px-8 lg:px-10 ${className}`}>
+    <section id={id} className={`relative px-5 py-16 sm:px-8 sm:py-24 lg:px-10 ${className}`}>
       <motion.div
         variants={stagger}
         initial="hidden"
@@ -170,7 +170,7 @@ function Section({
         viewport={{ once: true, amount: 0.18 }}
         className="mx-auto max-w-7xl"
       >
-        <motion.div variants={fadeUp} className="mb-12 max-w-3xl">
+        <motion.div variants={fadeUp} className="mb-8 max-w-3xl sm:mb-12">
           <p className="mb-4 text-sm font-medium uppercase tracking-[0.26em] text-cyanite/80">
             {eyebrow}
           </p>
@@ -241,7 +241,7 @@ function RotatingSubtitle() {
       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       exit={{ opacity: 0, y: -16 }}
       transition={{ duration: 0.55 }}
-      className="min-h-[3.5rem] text-balance text-xl leading-8 text-haze sm:min-h-[2rem] sm:text-2xl"
+      className="min-h-[4.75rem] text-balance text-xl leading-8 text-haze sm:min-h-[2rem] sm:text-2xl"
     >
       {subtitles[index]}
     </motion.p>
@@ -376,7 +376,7 @@ export default function Home() {
       <motion.div className="fixed left-0 top-0 z-50 h-1 origin-left bg-gradient-to-r from-cyanite via-ion to-ember" style={{ scaleX: progress }} />
       <motion.div className="pointer-events-none fixed inset-0 z-10" style={{ background: glow }} />
 
-      <header className="fixed left-0 right-0 top-0 z-40 px-5 py-5 sm:px-8 lg:px-10">
+      <header className="fixed left-0 right-0 top-0 z-40 px-4 py-4 sm:px-8 sm:py-5 lg:px-10">
         <nav className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/10 bg-ink/48 px-4 py-3 backdrop-blur-2xl">
           <a href="#hero" className="text-sm font-semibold tracking-wide text-pearl">
             KS
@@ -400,7 +400,7 @@ export default function Home() {
         </nav>
       </header>
 
-      <section id="hero" className="relative flex min-h-screen items-center px-5 pb-16 pt-28 sm:px-8 lg:px-10">
+      <section id="hero" className="relative flex min-h-[92svh] items-center px-5 pb-10 pt-24 sm:min-h-screen sm:px-8 sm:pb-16 sm:pt-28 lg:px-10">
         <motion.div style={{ y: heroY }} className="absolute inset-0">
           <Image
             src="/images/hero-technology-backdrop.png"
@@ -418,23 +418,23 @@ export default function Home() {
           variants={stagger}
           initial="hidden"
           animate="visible"
-          className="relative z-20 mx-auto grid w-full max-w-7xl items-end gap-12 lg:grid-cols-[1.15fr_0.85fr]"
+          className="relative z-20 mx-auto grid w-full max-w-7xl items-end gap-8 sm:gap-12 lg:grid-cols-[1.15fr_0.85fr]"
         >
           <div>
             <motion.p variants={fadeUp} className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-4 py-2 text-sm text-haze backdrop-blur-xl">
               <Sparkles size={15} className="text-cyanite" aria-hidden="true" />
               Enterprise AI, SAP B1, and scalable full-stack delivery
             </motion.p>
-            <motion.h1 variants={fadeUp} className="text-balance text-6xl font-semibold tracking-[-0.05em] text-white sm:text-7xl lg:text-8xl">
+            <motion.h1 variants={fadeUp} className="text-balance text-5xl font-semibold tracking-[-0.05em] text-white sm:text-7xl lg:text-8xl">
               Kalakonda Sairam
             </motion.h1>
-            <motion.h2 variants={fadeUp} className="mt-5 text-2xl font-medium tracking-[-0.01em] text-cyanite sm:text-3xl">
+            <motion.h2 variants={fadeUp} className="mt-4 text-2xl font-medium tracking-[-0.01em] text-cyanite sm:mt-5 sm:text-3xl">
               AI-Enabled Full Stack Engineer
             </motion.h2>
-            <motion.div variants={fadeUp} className="mt-6 max-w-2xl">
+            <motion.div variants={fadeUp} className="mt-4 max-w-2xl sm:mt-6">
               <RotatingSubtitle />
             </motion.div>
-            <motion.div variants={fadeUp} className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <motion.div variants={fadeUp} className="mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row">
               <MagneticButton href="#projects">
                 View Projects <ArrowDown size={17} aria-hidden="true" />
               </MagneticButton>
@@ -529,7 +529,7 @@ export default function Home() {
                 key={project.title}
                 variants={fadeUp}
                 whileHover={{ y: -8, scale: 1.015 }}
-                className="group relative min-h-[320px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.045] p-6 shadow-lift backdrop-blur-xl"
+                className="group relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.045] p-6 shadow-lift backdrop-blur-xl md:min-h-[320px]"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-cyanite/14 via-transparent to-ember/10 opacity-0 transition duration-500 group-hover:opacity-100" />
                 <div className="relative">

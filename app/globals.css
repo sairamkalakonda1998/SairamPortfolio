@@ -18,7 +18,12 @@ html {
 body {
   min-height: 100vh;
   overflow-x: hidden;
-  zoom: 90%;
+}
+
+@media (min-width: 768px) {
+  body {
+    zoom: 90%;
+  }
 }
 
 ::selection {
