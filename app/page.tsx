@@ -25,6 +25,7 @@ import {
   Gauge,
   Linkedin,
   Mail,
+  Menu,
   MessageCircle,
   Phone,
   ServerCog,
@@ -32,6 +33,7 @@ import {
   Trophy,
   type LucideIcon,
   Workflow,
+  X,
   Zap
 } from "lucide-react";
 import Image from "next/image";
@@ -337,6 +339,7 @@ function ContactAction({
 }
 
 export default function Home() {
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 24, mass: 0.2 });
   const heroY = useTransform(scrollYProgress, [0, 0.35], [0, 150]);
@@ -381,12 +384,44 @@ export default function Home() {
           <a href="#hero" className="text-sm font-semibold tracking-wide text-pearl">
             KS
           </a>
-          <div className="flex min-w-0 flex-1 items-center gap-4 overflow-x-auto px-1 text-xs text-haze [scrollbar-width:none] sm:justify-center sm:gap-6 sm:text-sm [&::-webkit-scrollbar]:hidden">
+          <div className="hidden min-w-0 flex-1 items-center justify-center gap-6 px-1 text-sm text-haze sm:flex">
             {["About", "Experience", "Projects", "Skills", "Contact"].map((item) => (
               <a key={item} href={`#${item.toLowerCase()}`} className="shrink-0 transition hover:text-pearl">
                 {item}
               </a>
             ))}
+          </div>
+          <div className="relative ml-auto sm:hidden">
+            <button
+              type="button"
+              onClick={() => setIsMobileNavOpen((open) => !open)}
+              aria-expanded={isMobileNavOpen}
+              aria-controls="mobile-navigation"
+              aria-label="Toggle navigation menu"
+              className="grid size-9 place-items-center rounded-full border border-white/10 text-haze transition hover:border-white/24 hover:text-pearl"
+            >
+              {isMobileNavOpen ? <X size={17} aria-hidden="true" /> : <Menu size={17} aria-hidden="true" />}
+            </button>
+            {isMobileNavOpen && (
+              <motion.div
+                id="mobile-navigation"
+                initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.2, ease: premiumEase }}
+                className="absolute right-0 top-12 w-48 overflow-hidden rounded-2xl border border-white/12 bg-ink/95 p-2 shadow-lift backdrop-blur-2xl"
+              >
+                {["About", "Experience", "Projects", "Skills", "Contact"].map((item) => (
+                  <a
+                    key={item}
+                    href={`#${item.toLowerCase()}`}
+                    onClick={() => setIsMobileNavOpen(false)}
+                    className="block rounded-xl px-3 py-2.5 text-sm text-haze transition hover:bg-white/[0.06] hover:text-pearl"
+                  >
+                    {item}
+                  </a>
+                ))}
+              </motion.div>
+            )}
           </div>
           <a
             href="https://www.linkedin.com/in/sairam-kalakonda/"
