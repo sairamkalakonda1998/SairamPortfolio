@@ -377,13 +377,13 @@ export default function Home() {
       <motion.div className="pointer-events-none fixed inset-0 z-10" style={{ background: glow }} />
 
       <header className="fixed left-0 right-0 top-0 z-40 px-4 py-4 sm:px-8 sm:py-5 lg:px-10">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/10 bg-ink/48 px-4 py-3 backdrop-blur-2xl">
+        <nav className="mx-auto flex max-w-7xl items-center gap-3 rounded-full border border-white/10 bg-ink/48 px-3 py-3 backdrop-blur-2xl sm:px-4">
           <a href="#hero" className="text-sm font-semibold tracking-wide text-pearl">
             KS
           </a>
-          <div className="hidden items-center gap-6 text-sm text-haze md:flex">
+          <div className="flex min-w-0 flex-1 items-center gap-4 overflow-x-auto px-1 text-xs text-haze [scrollbar-width:none] sm:justify-center sm:gap-6 sm:text-sm [&::-webkit-scrollbar]:hidden">
             {["About", "Experience", "Projects", "Skills", "Contact"].map((item) => (
-              <a key={item} href={`#${item.toLowerCase()}`} className="transition hover:text-pearl">
+              <a key={item} href={`#${item.toLowerCase()}`} className="shrink-0 transition hover:text-pearl">
                 {item}
               </a>
             ))}
@@ -438,7 +438,7 @@ export default function Home() {
               <MagneticButton href="#projects">
                 View Projects <ArrowDown size={17} aria-hidden="true" />
               </MagneticButton>
-              <MagneticButton href="/Kalakonda-Sairam-Resume.txt" variant="secondary" download>
+              <MagneticButton href="/K_Sairam_Resume.pdf" variant="secondary" download>
                 Download Resume <Download size={17} aria-hidden="true" />
               </MagneticButton>
             </motion.div>
