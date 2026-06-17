@@ -218,6 +218,7 @@ button {
 
   .section-heading--right .coin-slot {
     align-self: flex-end;
+    order: -1;
   }
 
   .coin-slot,
