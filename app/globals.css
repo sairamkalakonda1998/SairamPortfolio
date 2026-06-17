@@ -37,6 +37,32 @@ button {
   background-size: 24px 24px, 100% 100%;
 }
 
+.particle-dot {
+  position: absolute;
+  width: var(--particle-size, 3px);
+  height: var(--particle-size, 3px);
+  border-radius: 999px;
+  background: rgba(125, 211, 252, 0.62);
+  box-shadow: 0 0 16px rgba(125, 211, 252, 0.72);
+  opacity: 0.22;
+  transform: translate3d(0, 0, 0);
+  animation: particle-drift var(--particle-duration, 9s) ease-in-out var(--particle-delay, 0s) infinite;
+  contain: paint;
+}
+
+@keyframes particle-drift {
+  0%,
+  100% {
+    opacity: 0.16;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    opacity: 0.58;
+    transform: translate3d(0, -28px, 0) scale(1.28);
+  }
+}
+
 .mask-fade {
   mask-image: linear-gradient(to bottom, transparent, black 12%, black 82%, transparent);
 }
@@ -210,6 +236,11 @@ button {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .particle-dot {
+    animation: none !important;
+    opacity: 0.18;
   }
 
 }

@@ -3,8 +3,6 @@
 import {
   motion,
   type Variants,
-  useAnimationFrame,
-  useMotionTemplate,
   useMotionValue,
   useReducedMotion,
   useScroll,
@@ -86,11 +84,10 @@ const subtitles = [
 const premiumEase = [0.22, 1, 0.36, 1] as const;
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 38, filter: "blur(10px)" },
+  hidden: { opacity: 0, y: 32 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.75, ease: premiumEase }
   }
 };
@@ -387,8 +384,8 @@ function RotatingSubtitle() {
   return (
     <motion.p
       key={subtitles[index]}
-      initial={{ opacity: 0, y: 16, filter: "blur(8px)" }}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -16 }}
       transition={{ duration: 0.55 }}
       className="min-h-[4.75rem] text-balance text-xl leading-8 text-haze sm:min-h-[2rem] sm:text-2xl"
@@ -401,13 +398,13 @@ function RotatingSubtitle() {
 function ParticleField() {
   const particles = useMemo(
     () =>
-      Array.from({ length: 34 }, (_, i) => ({
+      Array.from({ length: 18 }, (_, i) => ({
         id: i,
         left: `${(i * 29) % 100}%`,
         top: `${(i * 47) % 100}%`,
         size: 2 + ((i * 7) % 4),
-        delay: (i % 8) * 0.22,
-        duration: 7 + (i % 6)
+        delay: (i % 6) * 0.32,
+        duration: 8 + (i % 5)
       })),
     []
   );
@@ -415,26 +412,16 @@ function ParticleField() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
       {particles.map((particle) => (
-        <motion.span
+        <span
           key={particle.id}
-          className="absolute rounded-full bg-cyanite/60 shadow-[0_0_18px_rgba(125,211,252,0.8)]"
+          className="particle-dot"
           style={{
             left: particle.left,
             top: particle.top,
-            width: particle.size,
-            height: particle.size
-          }}
-          animate={{
-            y: [0, -36, 0],
-            opacity: [0.12, 0.7, 0.12],
-            scale: [1, 1.45, 1]
-          }}
-          transition={{
-            duration: particle.duration,
-            repeat: Infinity,
-            delay: particle.delay,
-            ease: "easeInOut"
-          }}
+            "--particle-size": `${particle.size}px`,
+            "--particle-delay": `${particle.delay}s`,
+            "--particle-duration": `${particle.duration}s`
+          } as React.CSSProperties}
         />
       ))}
     </div>
@@ -952,9 +939,22 @@ function HeadingPathCoin() {
     };
 
     const buildAfterStableLayout = () => {
+      const schedule = (callback: () => void) => {
+        const requestIdle = (
+          window as Window & {
+            requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
+          }
+        ).requestIdleCallback;
+
+        if (requestIdle) {
+          requestIdle(callback, { timeout: 1400 });
+          return;
+        }
+        window.setTimeout(callback, 320);
+      };
       const fontReady = document.fonts?.ready ?? Promise.resolve();
       fontReady.then(() => {
-        requestAnimationFrame(() => requestAnimationFrame(build));
+        schedule(() => requestAnimationFrame(() => requestAnimationFrame(build)));
       });
     };
 
@@ -1004,9 +1004,6 @@ export default function Home() {
   const heroBackdropScale = useTransform(heroScrollProgress, [0, 1], [1, reducedMotion ? 1 : isMobile ? 1.06 : 1.15]);
   const heroHeadingScale = useTransform(heroScrollProgress, [0, 0.85], [1, reducedMotion ? 1 : isMobile ? 0.98 : 0.93]);
   const heroHeadingOpacity = useTransform(heroScrollProgress, [0, 0.85], [1, reducedMotion ? 1 : 0.36]);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const glow = useMotionTemplate`radial-gradient(520px circle at ${mouseX}px ${mouseY}px, rgba(125, 211, 252, 0.14), transparent 44%)`;
   const statZoom = useMemo(
     () =>
       createZoomVariant({
@@ -1064,24 +1061,15 @@ export default function Home() {
     [isMobile, reducedMotion]
   );
 
-  useAnimationFrame(() => {
-    const root = document.documentElement;
-    root.style.setProperty("--scroll-progress", `${scrollYProgress.get()}`);
-  });
-
   return (
     <>
-      <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" strategy="afterInteractive" />
-      <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" strategy="afterInteractive" />
+      <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" strategy="lazyOnload" />
+      <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" strategy="lazyOnload" />
       <main
         className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_50%_0%,rgba(45,82,110,0.22),transparent_30%),linear-gradient(180deg,#050608_0%,#080b10_45%,#050608_100%)]"
-        onMouseMove={(event) => {
-          mouseX.set(event.clientX);
-          mouseY.set(event.clientY);
-        }}
       >
       <motion.div className="fixed left-0 top-0 z-50 h-1 origin-left bg-gradient-to-r from-cyanite via-ion to-ember" style={{ scaleX: progress }} />
-      <motion.div className="pointer-events-none fixed inset-0 z-10" style={{ background: glow }} />
+      <div className="pointer-events-none fixed inset-0 z-10 bg-[radial-gradient(520px_circle_at_50%_18%,rgba(125,211,252,0.1),transparent_44%)]" />
       <HeadingPathCoin />
 
       <header className="fixed left-0 right-0 top-0 z-40 px-4 py-4 sm:px-8 sm:py-5 lg:px-10">
@@ -1192,15 +1180,13 @@ export default function Home() {
               <div className="absolute -inset-px rounded-[2rem] bg-gradient-to-br from-cyanite/30 via-transparent to-ember/20 opacity-70" />
               <div className="relative space-y-4">
                 {["SAP B1 Copilot", "WhatsApp approvals", "HANA optimization", "ASP.NET MVC portals"].map((item, index) => (
-                  <motion.div
+                  <div
                     key={item}
-                    animate={{ x: [0, index % 2 ? -6 : 6, 0] }}
-                    transition={{ duration: 5 + index, repeat: Infinity, ease: "easeInOut" }}
                     className="rounded-2xl border border-white/10 bg-ink/58 p-4"
                   >
                     <p className="text-sm text-haze">Capability 0{index + 1}</p>
                     <p className="mt-1 font-medium text-pearl">{item}</p>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
