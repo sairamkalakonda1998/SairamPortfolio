@@ -898,7 +898,10 @@ function HeadingPathCoin() {
         const stickyTop = isMobileViewport ? 88 : 112;
         const stickyCenterY = scrollY + stickyTop + currentRange.point.height / 2;
         const maxSectionY = Math.max(currentRange.point.center.y, currentRange.sectionBottom - currentRange.point.height / 2);
-        const y = Math.min(Math.max(currentRange.point.center.y, stickyCenterY), maxSectionY);
+        const isFinalRange = currentRange.index === waypoints.length - 1;
+        const y = isFinalRange
+          ? currentRange.point.center.y
+          : Math.min(Math.max(currentRange.point.center.y, stickyCenterY), maxSectionY);
 
         coin.classList.remove("is-traveling");
         gsap.set(coin, {
