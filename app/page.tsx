@@ -98,13 +98,13 @@ const projects: Array<{
   },
 ];
 
-const skills = {
-  Backend: ['C#', 'ASP.NET MVC', 'Python', 'Java'],
-  Frontend: ['Angular', 'JavaScript', 'HTML', 'CSS', 'Bootstrap', 'jQuery'],
-  Database: ['SAP HANA SQL', 'SQL Server', 'MySQL'],
-  Integrations: ['SAP B1 Service Layer', 'AI Copilot', 'WhatsApp Business API'],
-  Tools: ['Git'],
-};
+const skills: Array<{ category: string; icon: LucideIcon; items: string[] }> = [
+  { category: 'Backend', icon: ServerCog, items: ['C#', 'ASP.NET MVC', 'Python', 'Java'] },
+  { category: 'Frontend', icon: Code2, items: ['Angular', 'JavaScript', 'HTML', 'CSS', 'Bootstrap', 'jQuery'] },
+  { category: 'Database', icon: DatabaseZap, items: ['SAP HANA SQL', 'SQL Server', 'MySQL'] },
+  { category: 'Integrations', icon: Workflow, items: ['SAP B1 Service Layer', 'AI Copilot', 'WhatsApp Business API'] },
+  { category: 'Tools', icon: Wrench, items: ['Git', 'VS Code', 'SAP B1 Studio', 'Postman'] },
+];
 
 const achievements = [
   ['Best Performer of the Quarter', Trophy],
@@ -285,7 +285,7 @@ function PortfolioHome() {
         <SectionHeading eyebrow="About / 01" title="Enterprise engineering with an AI-first operating model." note="Reliable architecture, practical automation, measurable gains." />
         <div className="grid gap-12 lg:grid-cols-[.9fr_1.1fr] lg:gap-20">
           <MotionReveal><p data-testid="text-biography" className="text-xl leading-9 text-[#a9bcbc] sm:text-2xl">Kalakonda Sairam is an AI-enabled full stack engineer with 4+ years of experience delivering enterprise-grade solutions across ASP.NET MVC, Angular, SAP Business One, and SAP HANA. His work connects reliable application architecture with practical AI Copilot implementations, workflow automation, and measurable performance gains.</p></MotionReveal>
-          <div className="grid grid-cols-2 gap-x-5 gap-y-9 sm:grid-cols-4 lg:pt-2">{stats.map(([value, label], index) => <MotionReveal key={label} delay={index * .07}><div className="metric"><strong data-testid={`text-stat-${index}`}>{value}</strong><span>{label}</span></div></MotionReveal>)}</div>
+          <div className="grid grid-cols-2 gap-x-10 gap-y-10 lg:pt-2">{stats.map(([value, label], index) => <MotionReveal key={label} delay={index * .07}><div className="metric"><strong data-testid={`text-stat-${index}`}>{value}</strong><span>{label}</span></div></MotionReveal>)}</div>
         </div>
       </section>
 
@@ -319,7 +319,28 @@ function PortfolioHome() {
 
       <section id="skills" className="section-wrap border-t hairline">
         <SectionHeading eyebrow="Capabilities / 04" title="A practical stack for SAP-aware, AI-enabled product engineering." note="Deep where it matters. Comfortable across the whole system." />
-        <div className="grid gap-4 lg:grid-cols-5">{Object.entries(skills).map(([category, items], index) => <MotionReveal key={category} delay={index * .06}><article data-testid={`card-skill-${category.toLowerCase()}`} className="rounded-[1.5rem] border border-[rgba(194,224,222,.13)] bg-[rgba(17,34,39,.42)] p-5"><h3 className="mb-6 flex items-center gap-2 font-mono text-[10px] font-medium uppercase tracking-[.16em] text-[#77dfc0]"><Code2 size={14} aria-hidden="true" />{category}</h3><div className="flex flex-wrap gap-2">{items.map((skill) => <span data-testid={`text-skill-${skill.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} key={skill} className="skill-pill rounded-full border border-[rgba(194,224,222,.12)] bg-[rgba(194,224,222,.035)] px-3 py-2 text-xs text-[#a9bcbc]">{skill}</span>)}</div></article></MotionReveal>)}</div>
+        <MotionReveal>
+          <div className="overflow-hidden rounded-[2rem] border border-[rgba(194,224,222,.13)] bg-[rgba(17,34,39,.42)] backdrop-blur-[18px]">
+            {skills.map((skill, index) => {
+              const Icon = skill.icon;
+              return (
+                <div key={skill.category} className={`flex flex-col gap-5 px-7 py-6 sm:flex-row sm:items-center sm:gap-8 sm:px-9 sm:py-7 ${index < skills.length - 1 ? 'border-b border-[rgba(194,224,222,.1)]' : ''}`}>
+                  <div className="flex shrink-0 items-center gap-3 sm:w-44">
+                    <span className="grid size-9 place-items-center rounded-xl border border-[rgba(119,223,192,.2)] bg-[rgba(119,223,192,.06)] text-[#77dfc0]">
+                      <Icon size={16} aria-hidden="true" />
+                    </span>
+                    <h3 className="font-mono text-[11px] font-medium uppercase tracking-[.14em] text-[#77dfc0]">{skill.category}</h3>
+                  </div>
+                  <div className="flex flex-wrap gap-2.5">
+                    {skill.items.map((item) => (
+                      <span data-testid={`text-skill-${item.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} key={item} className="skill-pill rounded-full border border-[rgba(194,224,222,.14)] bg-[rgba(194,224,222,.05)] px-4 py-2.5 text-[13px] text-[#b8cece]">{item}</span>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </MotionReveal>
       </section>
 
       <section id="achievements" className="section-wrap border-t hairline">
@@ -329,9 +350,36 @@ function PortfolioHome() {
 
       <section id="contact" className="section-wrap border-t hairline pb-16">
         <SectionHeading eyebrow="Contact / 06" title="Let's build something intelligent." note="Good systems begin with a clear problem and a direct conversation." />
-        <div className="grid gap-7 lg:grid-cols-[.9fr_1.1fr]">
-          <MotionReveal><div className="relative overflow-hidden rounded-[2rem] bg-[#dff7f2] p-7 text-[#0a1719] sm:p-10"><div className="absolute -right-8 -top-12 size-48 rounded-full border border-[#0a1719]/10" /><div className="absolute -right-16 -top-20 size-72 rounded-full border border-[#0a1719]/10" /><Mail size={22} className="relative mb-16" aria-hidden="true" /><p className="display relative max-w-md text-3xl font-semibold leading-[1.05] tracking-[-.05em] sm:text-4xl">Available for enterprise full-stack engineering, SAP Business One extensions, AI copilots, workflow automation, and performance-focused application modernization.</p><a data-testid="link-start-conversation" href="mailto:sairamkalakonda1998@gmail.com" className="relative mt-9 inline-flex items-center gap-2 text-sm font-bold transition hover:gap-4">Start a conversation <ArrowUpRight size={18} aria-hidden="true" /></a></div></MotionReveal>
-          <MotionReveal delay={.1}><div className="glass rounded-[2rem] px-6 sm:px-8"><ContactAction icon={Mail} label="Email" value="sairamkalakonda1998@gmail.com" href="mailto:sairamkalakonda1998@gmail.com" /><ContactAction icon={Phone} label="Phone" value="+91 7013883110" href="tel:+917013883110" /><ContactAction icon={Linkedin} label="LinkedIn" value="linkedin.com/in/sairam-kalakonda" href="https://www.linkedin.com/in/sairam-kalakonda/" /></div></MotionReveal>
+        <div className="grid gap-7 lg:grid-cols-2 lg:items-stretch">
+          <MotionReveal>
+            <div className="contact-cta relative flex h-full flex-col justify-between overflow-hidden rounded-[2rem] p-8 sm:p-10">
+              <div>
+                <div className="mb-8 flex items-center gap-3">
+                  <span className="grid size-11 place-items-center rounded-full bg-[#0a1719]/10"><Mail size={18} aria-hidden="true" /></span>
+                  <span className="font-mono text-[10px] uppercase tracking-[.16em] text-[#0a1719]/50">Open to opportunities</span>
+                </div>
+                <h3 className="display max-w-lg text-2xl font-semibold leading-[1.2] tracking-[-.04em] text-[#0a1719] sm:text-[1.75rem]">
+                  Available for enterprise full-stack engineering, SAP B1 extensions, AI copilots, and workflow automation.
+                </h3>
+              </div>
+              <a data-testid="link-start-conversation" href="mailto:sairamkalakonda1998@gmail.com" className="group mt-10 inline-flex w-fit items-center gap-3 rounded-full bg-[#0a1719] px-6 py-3.5 text-sm font-semibold text-[#dff7f2] transition hover:gap-4 hover:bg-[#112227]">
+                Start a conversation <ArrowUpRight size={16} className="transition group-hover:rotate-45" aria-hidden="true" />
+              </a>
+            </div>
+          </MotionReveal>
+          <MotionReveal delay={.1}>
+            <div className="flex h-full flex-col rounded-[2rem] border border-[rgba(194,224,222,.13)] bg-[rgba(17,34,39,.54)] backdrop-blur-[18px]">
+              <div className="flex-1 px-7 pt-7 sm:px-9 sm:pt-9">
+                <p className="mb-2 font-mono text-[10px] uppercase tracking-[.16em] text-[#77dfc0]">Get in touch</p>
+                <p className="max-w-sm text-sm leading-6 text-[#8da7a7]">Reach out through any of the channels below. I typically respond within 24 hours.</p>
+              </div>
+              <div className="mt-auto px-7 pb-2 sm:px-9 sm:pb-3">
+                <ContactAction icon={Mail} label="Email" value="sairamkalakonda1998@gmail.com" href="mailto:sairamkalakonda1998@gmail.com" />
+                <ContactAction icon={Phone} label="Phone" value="+91 7013883110" href="tel:+917013883110" />
+                <ContactAction icon={Linkedin} label="LinkedIn" value="linkedin.com/in/sairam-kalakonda" href="https://www.linkedin.com/in/sairam-kalakonda/" />
+              </div>
+            </div>
+          </MotionReveal>
         </div>
       </section>
 

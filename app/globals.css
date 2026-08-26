@@ -36,8 +36,8 @@
 .orbit { position:absolute; border:1px solid rgba(119,223,192,.2); border-radius:999px; transform:rotate(-18deg); }
 .orbit::after { content:""; position:absolute; width:7px; height:7px; border-radius:50%; background:#77dfc0; box-shadow: 0 0 24px 5px rgba(119,223,192,.55); }
 .hero-grid { background-image: linear-gradient(rgba(163, 206, 199, .065) 1px, transparent 1px), linear-gradient(90deg, rgba(163, 206, 199, .065) 1px, transparent 1px); background-size: 72px 72px; mask-image:linear-gradient(to bottom, black, transparent 80%); }
-.metric { border-left:1px solid rgba(119,223,192,.32); padding-left:1rem; }
-.metric strong { font:600 clamp(1.6rem,4vw,2.8rem)/1 var(--app-font-serif); color:#effcf8; letter-spacing:-.06em; }
+.metric { border-left:1px solid rgba(119,223,192,.32); padding-left:1.15rem; }
+.metric strong { display:block; font:600 1.75rem/1.1 var(--app-font-serif); color:#effcf8; letter-spacing:-.03em; white-space:nowrap; }
 .metric span { display:block; color:#8da7a7; font-size:.72rem; line-height:1.5; margin-top:.55rem; }
 .project-card { position:relative; overflow:hidden; transition:transform .45s cubic-bezier(.22,1,.36,1), border-color .45s ease, background-color .45s ease; }
 .project-card::after { content:""; pointer-events:none; position:absolute; inset:0; transform:translateX(-120%); background:linear-gradient(110deg, transparent 35%, rgba(119,223,192,.09), transparent 68%); transition:transform .7s ease; }
@@ -50,6 +50,7 @@
 .timeline-line { background:linear-gradient(to bottom, transparent, rgba(119,223,192,.52) 15%, rgba(119,223,192,.16) 85%, transparent); }
 .contact-link { transition:color .25s ease, transform .3s ease; }
 .contact-link:hover { color:#77dfc0; transform:translateX(4px); }
+.contact-cta { background: linear-gradient(145deg, #dff7f2 0%, #c8ede4 40%, #b8e8db 100%); }
 .nav-link { position:relative; color:#9ab0b0; transition:color .25s ease; }
 .nav-link::after { content:""; position:absolute; left:0; right:0; bottom:-.7rem; height:1px; transform:scaleX(0); transform-origin:left; background:#77dfc0; transition:transform .25s ease; }
 .nav-link:hover, .nav-link.active { color:#effcf8; }
