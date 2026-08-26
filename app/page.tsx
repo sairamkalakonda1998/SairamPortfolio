@@ -1,1384 +1,345 @@
 "use client";
 
+import { useEffect, useState, type ReactNode } from 'react';
+import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import {
-  motion,
-  type Variants,
-  useMotionValue,
-  useReducedMotion,
-  useScroll,
-  useSpring,
-  useTransform
-} from "framer-motion";
-import {
-  ArrowDown,
-  ArrowUpRight,
-  Bot,
-  BrainCircuit,
-  BriefcaseBusiness,
-  Check,
-  Clipboard,
-  Code2,
-  DatabaseZap,
-  Download,
-  Gauge,
-  Linkedin,
-  Mail,
-  Menu,
-  MessageCircle,
-  Phone,
-  ScrollText,
-  ServerCog,
-  Sparkles,
-  Trophy,
-  type LucideIcon,
-  Wrench,
-  Workflow,
-  X,
-  Zap
-} from "lucide-react";
-import Image from "next/image";
-import Script from "next/script";
-import { useEffect, useMemo, useRef, useState } from "react";
-
-declare global {
-  interface Window {
-    gsap?: {
-      registerPlugin: (...plugins: unknown[]) => void;
-      set: (target: unknown, vars: Record<string, unknown>) => void;
-      to: (target: unknown, vars: Record<string, unknown>) => { kill: () => void; progress?: (value: number) => void };
-      from: (target: unknown, vars: Record<string, unknown>) => { kill: () => void };
-      fromTo: (
-        target: unknown,
-        fromVars: Record<string, unknown>,
-        toVars: Record<string, unknown>
-      ) => { kill: () => void; progress?: (value: number) => void };
-      timeline: (vars?: Record<string, unknown>) => {
-        fromTo: (
-          target: unknown,
-          fromVars: Record<string, unknown>,
-          toVars: Record<string, unknown>,
-          position?: number
-        ) => unknown;
-        set: (target: unknown, vars: Record<string, unknown>, position?: number) => unknown;
-        to: (target: unknown, vars: Record<string, unknown>) => unknown;
-        kill: () => void;
-        progress?: (value: number) => void;
-      };
-    };
-    ScrollTrigger?: {
-      create: (vars: Record<string, unknown>) => { kill: () => void };
-      getAll: () => Array<{ kill: () => void }>;
-      maxScroll?: (target: Window) => number;
-      refresh: () => void;
-      update: () => void;
-    };
-  }
-}
-
-const subtitles = [
-  "Building Intelligent Enterprise Experiences.",
-  "Transforming SAP Workflows with AI.",
-  "Crafting Scalable .NET Applications."
-];
+  ArrowDown, ArrowUpRight, BrainCircuit, BriefcaseBusiness, Check, Clipboard, Code2,
+  DatabaseZap, Download, Gauge, Linkedin, Mail, Menu, MessageCircle, Phone, ScrollText,
+  ServerCog, Sparkles, Trophy, Workflow, Wrench, X, Zap,
+} from 'lucide-react';
+import { type LucideIcon } from 'lucide-react';
 
 const premiumEase = [0.22, 1, 0.36, 1] as const;
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 32 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.75, ease: premiumEase }
-  }
-};
-
-const stagger: Variants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.11,
-      delayChildren: 0.08
-    }
-  }
-};
-
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 767px)");
-    const update = () => setIsMobile(mediaQuery.matches);
-
-    update();
-    mediaQuery.addEventListener("change", update);
-    return () => mediaQuery.removeEventListener("change", update);
-  }, []);
-
-  return isMobile;
-}
-
-function createZoomVariant({
-  desktopScale,
-  mobileScale,
-  y = 0,
-  rotateX = 0,
-  delay = 0,
-  staggerChildren = 0,
-  reducedMotion = false,
-  isMobile = false
-}: {
-  desktopScale: number;
-  mobileScale: number;
-  y?: number;
-  rotateX?: number;
-  delay?: number;
-  staggerChildren?: number;
-  reducedMotion?: boolean;
-  isMobile?: boolean;
-}): Variants {
-  return {
-    hidden: {
-      opacity: 0,
-      scale: reducedMotion ? 1 : isMobile ? mobileScale : desktopScale,
-      y: reducedMotion ? 0 : y,
-      rotateX: reducedMotion ? 0 : rotateX
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      rotateX: 0,
-      transition: {
-        duration: 0.5,
-        delay,
-        ease: premiumEase,
-        staggerChildren,
-        delayChildren: staggerChildren ? 0.12 : 0
-      }
-    }
-  };
-}
+const navItems = [
+  { label: 'About', id: 'about' },
+  { label: 'Experience', id: 'experience' },
+  { label: 'Projects', id: 'projects' },
+  { label: 'Skills', id: 'skills' },
+  { label: 'Contact', id: 'contact' },
+];
 
 const stats = [
-  ["4+", "Years Experience"],
-  ["Enterprise", "Applications Delivered"],
-  ["SAP B1", "Integrations"],
-  ["AI", "Solutions Built"]
+  ['4+', 'Years experience'],
+  ['Enterprise', 'Applications delivered'],
+  ['SAP B1', 'Integrations'],
+  ['AI', 'Solutions built'],
 ];
 
 const experience = [
   {
-    company: "10X Software Solutions",
-    role: "Technical Consultant",
-    period: "Aug 2023 - Present",
+    company: '10X Software Solutions',
+    role: 'Technical Consultant',
+    period: 'Aug 2023 — Present',
     points: [
-      "Integrated AI Copilot within SAP B1 applications.",
-      "Built WhatsApp approval bots.",
-      "Developed ESS Portal using ASP.NET MVC and SAP HANA.",
-      "Optimized HANA procedures improving performance by 30%."
-    ]
+      'Integrated AI Copilot within SAP B1 applications.',
+      'Built WhatsApp approval bots.',
+      'Developed ESS Portal using ASP.NET MVC and SAP HANA.',
+      'Optimized HANA procedures improving performance by 30%.',
+    ],
   },
   {
-    company: "Wipro Limited",
-    role: "Project Engineer",
-    period: "Mar 2021 - Nov 2022",
+    company: 'Wipro Limited',
+    role: 'Project Engineer',
+    period: 'Mar 2021 — Nov 2022',
     points: [
-      "Developed Commercial LRD platform.",
-      "Reduced server resource consumption by 15%.",
-      "Improved platform stability and performance.",
-      "Worked within Agile delivery environments."
-    ]
-  }
+      'Developed Commercial LRD platform.',
+      'Reduced server resource consumption by 15%.',
+      'Improved platform stability and performance.',
+      'Worked within Agile delivery environments.',
+    ],
+  },
 ];
 
-const projects = [
+const projects: Array<{
+  title: string;
+  description: string;
+  tech: string[];
+  problem: string;
+  impact: string;
+  icon: LucideIcon;
+  index: string;
+}> = [
   {
+    index: '01',
     icon: BrainCircuit,
-    title: "SAP B1 AI Copilot",
-    description: "Intelligent assistant embedded into enterprise applications.",
-    tech: ["SAP B1", "AI Copilot", "Service Layer"],
-    problem: "Teams needed faster answers and guided actions inside SAP workflows.",
-    impact: "Reduced decision friction with embedded AI assistance."
+    title: 'SAP B1 AI Copilot',
+    description: 'Intelligent assistant embedded into enterprise applications.',
+    tech: ['SAP B1', 'AI Copilot', 'Service Layer'],
+    problem: 'Teams needed faster answers and guided actions inside SAP workflows.',
+    impact: 'Reduced decision friction with embedded AI assistance.',
   },
   {
+    index: '02',
     icon: MessageCircle,
-    title: "WhatsApp Approval Bot",
-    description: "Real-time approvals, reports, and alerts integrated with SAP.",
-    tech: ["WhatsApp API", "SAP B1", "C#"],
-    problem: "Approval cycles were delayed by desktop-only workflows.",
-    impact: "Enabled mobile-first decisions with live enterprise context."
+    title: 'WhatsApp Approval Bot',
+    description: 'Real-time approvals, reports, and alerts integrated with SAP.',
+    tech: ['WhatsApp API', 'SAP B1', 'C#'],
+    problem: 'Approval cycles were delayed by desktop-only workflows.',
+    impact: 'Enabled mobile-first decisions with live enterprise context.',
   },
   {
+    index: '03',
     icon: ServerCog,
-    title: "Employee Self-Service Portal",
-    description: "ASP.NET MVC application powered by SAP HANA.",
-    tech: ["ASP.NET MVC", "SAP HANA", "Bootstrap"],
-    problem: "Employee requests needed a reliable self-service layer.",
-    impact: "Centralized ESS workflows with enterprise-grade controls."
+    title: 'Employee Self-Service Portal',
+    description: 'ASP.NET MVC application powered by SAP HANA.',
+    tech: ['ASP.NET MVC', 'SAP HANA', 'Bootstrap'],
+    problem: 'Employee requests needed a reliable self-service layer.',
+    impact: 'Centralized ESS workflows with enterprise-grade controls.',
   },
   {
+    index: '04',
     icon: DatabaseZap,
-    title: "Intelligent Reporting Engine",
-    description: "Automated multi-format report generation system.",
-    tech: ["SQL", "SAP HANA", "Automation"],
-    problem: "Manual reporting consumed delivery bandwidth.",
-    impact: "Accelerated recurring insights across operational teams."
-  }
+    title: 'Intelligent Reporting Engine',
+    description: 'Automated multi-format report generation system.',
+    tech: ['SQL', 'SAP HANA', 'Automation'],
+    problem: 'Manual reporting consumed delivery bandwidth.',
+    impact: 'Accelerated recurring insights across operational teams.',
+  },
 ];
 
 const skills = {
-  Backend: ["C#", "ASP.NET MVC", "Python", "Java"],
-  Frontend: ["Angular", "JavaScript", "HTML", "CSS", "Bootstrap", "jQuery"],
-  Database: ["SAP HANA SQL", "SQL Server", "MySQL"],
-  Integrations: ["SAP B1 Service Layer", "AI Copilot", "WhatsApp Business API"],
-  Tools: ["Git"]
+  Backend: ['C#', 'ASP.NET MVC', 'Python', 'Java'],
+  Frontend: ['Angular', 'JavaScript', 'HTML', 'CSS', 'Bootstrap', 'jQuery'],
+  Database: ['SAP HANA SQL', 'SQL Server', 'MySQL'],
+  Integrations: ['SAP B1 Service Layer', 'AI Copilot', 'WhatsApp Business API'],
+  Tools: ['Git'],
 };
 
 const achievements = [
-  ["Best Performer of the Quarter", Trophy],
-  ["AI Copilot implementation success", Bot],
-  ["Enterprise automation initiatives", Workflow],
-  ["Scalable architecture improvements", Sparkles],
-  ["Performance optimization achievements", Gauge]
-];
+  ['Best Performer of the Quarter', Trophy],
+  ['AI Copilot implementation success', BrainCircuit],
+  ['Enterprise automation initiatives', Workflow],
+  ['Scalable architecture improvements', Sparkles],
+  ['Performance optimization achievements', Gauge],
+] as const;
 
-const sectionCoins: Array<{
-  id: string;
-  label: string;
-  shortLabel?: string;
-  icon?: LucideIcon;
-  iconName?: string;
-}> = [
-  { id: "hero", label: "Hero", shortLabel: "KS" },
-  { id: "about", label: "About", icon: ScrollText, iconName: "scroll-text" },
-  { id: "experience", label: "Experience", icon: BriefcaseBusiness, iconName: "briefcase-business" },
-  { id: "projects", label: "Projects", icon: Code2, iconName: "code-2" },
-  { id: "skills", label: "Skills", icon: Wrench, iconName: "wrench" },
-  { id: "achievements", label: "Achievements", icon: Trophy, iconName: "trophy" },
-  { id: "contact", label: "Contact", icon: Mail, iconName: "mail" }
-];
-
-function coinSideFor(sectionId: string) {
-  const index = sectionCoins.findIndex((section) => section.id === sectionId);
-  return index % 2 === 0 ? "right" : "left";
-}
-
-function Section({
-  id,
-  eyebrow,
-  title,
-  children,
-  className = ""
-}: {
-  id: string;
-  eyebrow: string;
-  title: string;
-  children: React.ReactNode;
-  className?: string;
-}) {
+function MotionReveal({ children, delay = 0, className = '' }: { children: ReactNode; delay?: number; className?: string }) {
   const reducedMotion = useReducedMotion();
-  const isMobile = useIsMobile();
-  const coinSide = coinSideFor(id);
-  const headerZoom = createZoomVariant({
-    desktopScale: 1.1,
-    mobileScale: 1.04,
-    reducedMotion: Boolean(reducedMotion),
-    isMobile
-  });
-  const coinSlot = <div className="coin-slot" data-section={id} data-side={coinSide} />;
-  const headingCopy = (
+  return (
     <motion.div
-      variants={headerZoom}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.7 }}
-      className="section-heading-copy max-w-3xl"
+      className={`reveal ${className}`}
+      initial={reducedMotion ? false : { opacity: 0, y: 26 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.14 }}
+      transition={{ duration: 0.72, delay, ease: premiumEase }}
     >
-      <p className="mb-4 text-sm font-medium uppercase tracking-[0.26em] text-cyanite/80">
-        {eyebrow}
-      </p>
-      <h2 className="text-balance text-4xl font-semibold tracking-[-0.02em] text-pearl sm:text-5xl lg:text-6xl">
-        {title}
-      </h2>
+      {children}
     </motion.div>
   );
-
-  return (
-    <section id={id} className={`relative px-5 py-16 sm:px-8 sm:py-24 lg:px-10 ${className}`}>
-      <motion.div
-        variants={stagger}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.18 }}
-        className="relative z-20 mx-auto max-w-7xl"
-      >
-        <div className={`section-heading-wrapper section-heading--${coinSide} mb-8 sm:mb-12`}>
-          {coinSide === "left" ? (
-            <>
-              {coinSlot}
-              {headingCopy}
-            </>
-          ) : (
-            <>
-              {headingCopy}
-              {coinSlot}
-            </>
-          )}
-        </div>
-        {children}
-      </motion.div>
-    </section>
-  );
 }
 
-function MagneticButton({
-  children,
-  href,
-  variant = "primary",
-  download
-}: {
-  children: React.ReactNode;
-  href: string;
-  variant?: "primary" | "secondary";
-  download?: boolean;
-}) {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
+function MagneticLink({ children, href, variant = 'primary', download = false }: { children: ReactNode; href: string; variant?: 'primary' | 'quiet'; download?: boolean }) {
+  const [hovered, setHovered] = useState(false);
   return (
     <motion.a
+      data-testid={`link-${href.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '') || 'action'}`}
       href={href}
-      download={download}
-      onMouseMove={(event) => {
-        const rect = event.currentTarget.getBoundingClientRect();
-        x.set((event.clientX - rect.left - rect.width / 2) * 0.18);
-        y.set((event.clientY - rect.top - rect.height / 2) * 0.18);
-      }}
-      onMouseLeave={() => {
-        x.set(0);
-        y.set(0);
-      }}
-      style={{ x, y }}
-      whileTap={{ scale: 0.98 }}
-      className={`group inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition ${
-        variant === "primary"
-          ? "bg-pearl text-ink shadow-glow hover:bg-white"
-          : "border border-white/14 bg-white/[0.04] text-pearl backdrop-blur-xl hover:border-white/28 hover:bg-white/[0.08]"
-      }`}
+      download={download || undefined}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      animate={hovered ? { y: -3 } : { y: 0 }}
+      transition={{ duration: 0.25, ease: premiumEase }}
+      className={`inline-flex min-h-12 items-center justify-center gap-3 rounded-full px-5 text-sm font-semibold ${variant === 'primary'
+        ? 'bg-[#dff7f2] text-[#0a1719] shadow-[0_12px_30px_rgba(119,223,192,.14)] hover:bg-white'
+        : 'border border-[rgba(194,224,222,.2)] bg-[rgba(194,224,222,.05)] text-[#dff7f2] hover:border-[rgba(119,223,192,.55)] hover:bg-[rgba(119,223,192,.08)]'}`}
     >
       {children}
     </motion.a>
   );
 }
 
-function RotatingSubtitle() {
-  const [index, setIndex] = useState(0);
+function SectionHeading({ eyebrow, title, note }: { eyebrow: string; title: string; note?: string }) {
+  return (
+    <div className="mb-12 grid gap-5 md:grid-cols-[1fr_280px] md:items-end">
+      <div>
+        <p className="eyebrow mb-5">{eyebrow}</p>
+        <h2 className="display max-w-3xl text-4xl font-semibold leading-[1.02] tracking-[-.055em] text-[#eaf9f5] sm:text-5xl lg:text-[4.35rem]">{title}</h2>
+      </div>
+      {note && <p className="border-l border-[rgba(119,223,192,.35)] pl-4 text-sm leading-6 text-[#8da7a7]">{note}</p>}
+    </div>
+  );
+}
+
+function ContactAction({ icon: Icon, label, value, href }: { icon: LucideIcon; label: string; value: string; href: string }) {
+  const [copied, setCopied] = useState(false);
+  async function copyValue() {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1500);
+    } catch {
+      setCopied(false);
+    }
+  }
+  return (
+    <div className="flex items-center justify-between gap-4 border-t hairline py-5">
+      <a data-testid={`link-contact-${label.toLowerCase()}`} href={href} className="contact-link flex min-w-0 items-center gap-4 text-[#dff7f2]">
+        <span className="grid size-11 shrink-0 place-items-center rounded-full border border-[rgba(119,223,192,.25)] bg-[rgba(119,223,192,.06)] text-[#77dfc0]"><Icon size={18} aria-hidden="true" /></span>
+        <span className="min-w-0"><span className="block text-xs uppercase tracking-[.14em] text-[#769091]">{label}</span><span data-testid={`text-contact-${label.toLowerCase()}`} className="block truncate pt-1 text-sm sm:text-base">{value}</span></span>
+      </a>
+      <button data-testid={`button-copy-${label.toLowerCase()}`} type="button" onClick={copyValue} className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[rgba(194,224,222,.18)] px-3 py-2 text-xs text-[#91a8a8] transition hover:border-[#77dfc0] hover:text-[#dff7f2]">
+        {copied ? <Check size={14} aria-hidden="true" /> : <Clipboard size={14} aria-hidden="true" />}
+        {copied ? 'Copied' : 'Copy'}
+      </button>
+    </div>
+  );
+}
+
+function PortfolioHome() {
+  const reducedMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  const heroY = useTransform(scrollYProgress, [0, 0.25], [0, -90]);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
 
   useEffect(() => {
-    const timer = window.setInterval(() => {
-      setIndex((current) => (current + 1) % subtitles.length);
-    }, 2600);
-    return () => window.clearInterval(timer);
+    const sections = ['hero', ...navItems.map((item) => item.id)].map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible) setActiveSection(visible.target.id);
+    }, { rootMargin: '-35% 0px -55% 0px', threshold: [0, 0.2, 0.6] });
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
   }, []);
 
-  return (
-    <motion.p
-      key={subtitles[index]}
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -16 }}
-      transition={{ duration: 0.55 }}
-      className="min-h-[4.75rem] text-balance text-xl leading-8 text-haze sm:min-h-[2rem] sm:text-2xl"
-    >
-      {subtitles[index]}
-    </motion.p>
-  );
-}
-
-function ParticleField() {
-  const particles = useMemo(
-    () =>
-      Array.from({ length: 18 }, (_, i) => ({
-        id: i,
-        left: `${(i * 29) % 100}%`,
-        top: `${(i * 47) % 100}%`,
-        size: 2 + ((i * 7) % 4),
-        delay: (i % 6) * 0.32,
-        duration: 8 + (i % 5)
-      })),
-    []
-  );
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' });
+    setMobileNavOpen(false);
+  };
 
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      {particles.map((particle) => (
-        <span
-          key={particle.id}
-          className="particle-dot"
-          style={{
-            left: particle.left,
-            top: particle.top,
-            "--particle-size": `${particle.size}px`,
-            "--particle-delay": `${particle.delay}s`,
-            "--particle-duration": `${particle.duration}s`
-          } as React.CSSProperties}
-        />
-      ))}
-    </div>
-  );
-}
-
-function ContactAction({
-  icon: Icon,
-  label,
-  value,
-  href
-}: {
-  icon: LucideIcon;
-  label: string;
-  value: string;
-  href: string;
-}) {
-  const [copied, setCopied] = useState(false);
-
-  async function copyValue() {
-    await navigator.clipboard.writeText(value);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1400);
-  }
-
-  return (
-    <motion.div
-      variants={fadeUp}
-      className="group flex flex-col gap-4 border-t border-white/10 py-6 sm:flex-row sm:items-center sm:justify-between"
-    >
-      <a href={href} className="flex min-w-0 items-center gap-4">
-        <span className="grid size-11 shrink-0 place-items-center rounded-full border border-white/12 bg-white/[0.04] text-cyanite transition group-hover:border-cyanite/40 group-hover:bg-cyanite/10">
-          <Icon size={19} aria-hidden="true" />
-        </span>
-        <span className="min-w-0">
-          <span className="block text-sm text-haze">{label}</span>
-          <span className="block break-words text-base font-medium text-pearl">{value}</span>
-        </span>
-      </a>
-      <button
-        type="button"
-        onClick={copyValue}
-        className="inline-flex h-10 w-fit items-center justify-center gap-2 rounded-full border border-white/12 px-4 text-sm text-haze transition hover:border-white/28 hover:text-pearl"
-      >
-        {copied ? <Check size={16} aria-hidden="true" /> : <Clipboard size={16} aria-hidden="true" />}
-        {copied ? "Copied" : "Copy"}
-      </button>
-    </motion.div>
-  );
-}
-
-function CoinGlyph({ sectionId }: { sectionId: string }) {
-  const section = sectionCoins.find((item) => item.id === sectionId) ?? sectionCoins[0];
-
-  if (section.shortLabel) {
-    return <span className="coin-monogram">{section.shortLabel}</span>;
-  }
-
-  const Icon = section.icon ?? Code2;
-  return <Icon aria-hidden="true" strokeWidth={2.2} />;
-}
-
-function CoinFaceStack() {
-  return (
-    <span className="coin-face-stack">
-      {sectionCoins.map((section) => (
-        <span
-          key={section.id}
-          className={`coin-face-icon ${section.id === "hero" ? "is-active" : ""}`}
-          data-coin-icon={section.id}
-        >
-          <CoinGlyph sectionId={section.id} />
-        </span>
-      ))}
-    </span>
-  );
-}
-
-function HeadingPathCoin() {
-  const coinRef = useRef<HTMLDivElement>(null);
-  const reducedMotion = useReducedMotion();
-
-  useEffect(() => {
-    const coin = coinRef.current;
-    if (!coin) return;
-
-    let resizeTimer = 0;
-    let activeIcon = "hero";
-    let lastImpact = "";
-    let setupAttempts = 0;
-    let playedEntrance = false;
-    let cleanupTriggers: Array<{ kill: () => void }> = [];
-    let snapTimer = 0;
-    let snapFrame = 0;
-    let landingTimer = 0;
-    let isSnapping = false;
-
-    const setActiveIcon = (sectionId: string) => {
-      if (activeIcon === sectionId) return;
-      activeIcon = sectionId;
-      coin.querySelectorAll<HTMLElement>("[data-coin-icon]").forEach((icon) => {
-        icon.classList.toggle("is-active", icon.dataset.coinIcon === sectionId);
-      });
-    };
-
-    const impact = () => {
-      const gsap = window.gsap;
-      if (!gsap) return;
-      const target = coin.querySelector<HTMLElement>(".coin-inner") ?? coin;
-      gsap.to(target, {
-        scale: 1.08,
-        duration: 0.15,
-        ease: "back.out(1.7)",
-        yoyo: true,
-        repeat: 1
-      });
-      gsap.to(target, {
-        boxShadow: "0 24px 58px rgba(0,0,0,0.34), 0 0 48px rgba(125,211,252,0.72)",
-        duration: 0.18,
-        yoyo: true,
-        repeat: 1,
-        ease: "power2.out"
-      });
-    };
-
-    const getWaypoints = () =>
-      Array.from(document.querySelectorAll<HTMLElement>(".coin-slot"))
-        .map((slot) => {
-          const rect = slot.getBoundingClientRect();
-          return {
-            section: slot.dataset.section ?? "",
-            side: slot.dataset.side ?? "right",
-            slot,
-            width: rect.width,
-            height: rect.height,
-            scrollY: 0,
-            center: {
-              x: rect.left + rect.width / 2 + window.scrollX,
-              y: rect.top + rect.height / 2 + window.scrollY
-            }
-          };
-        })
-        .filter((point) => point.section && point.width > 0 && point.height > 0)
-        .sort(
-          (a, b) =>
-            sectionCoins.findIndex((section) => section.id === a.section) -
-            sectionCoins.findIndex((section) => section.id === b.section)
-        );
-
-    const killSetup = () => {
-      window.clearTimeout(snapTimer);
-      window.clearTimeout(landingTimer);
-      if (snapFrame) window.cancelAnimationFrame(snapFrame);
-      snapFrame = 0;
-      isSnapping = false;
-      cleanupTriggers.forEach((trigger) => trigger.kill());
-      cleanupTriggers = [];
-    };
-
-    const build = () => {
-      const gsap = window.gsap;
-      const ScrollTrigger = window.ScrollTrigger;
-
-      if (!gsap || !ScrollTrigger) {
-        if (setupAttempts < 80) {
-          setupAttempts += 1;
-          window.setTimeout(build, 100);
-        }
-        return;
-      }
-
-      killSetup();
-      gsap.registerPlugin(ScrollTrigger);
-      setActiveIcon(activeIcon);
-
-      const waypoints = getWaypoints();
-      if (!waypoints.length) return;
-      const maxScroll = Math.max(1, ScrollTrigger.maxScroll?.(window) ?? document.documentElement.scrollHeight - window.innerHeight);
-      type Waypoint = (typeof waypoints)[number];
-      type CoinTransition = {
-        index: number;
-        from: Waypoint;
-        to: Waypoint;
-        startY: number;
-        endY: number;
-        progress: number;
-        tween: ReturnType<typeof gsap.fromTo>;
-      };
-      type SectionRange = {
-        index: number;
-        point: Waypoint;
-        startY: number;
-        endY: number;
-        sectionBottom: number;
-      };
-
-      const first = waypoints[0];
-      gsap.set(coin, {
-        x: first.center.x,
-        y: first.center.y,
-        xPercent: -50,
-        yPercent: -50,
-        opacity: 1,
-        rotationY: 0
-      });
-
-      const transitions: CoinTransition[] = [];
-
-      const landAt = (point: Waypoint, index: number, withImpact = true) => {
-        coin.classList.remove("is-traveling");
-        gsap.set(coin, {
-          x: point.center.x,
-          y: point.center.y,
-          rotationY: reducedMotion ? 0 : index * 360,
-          opacity: 1
-        });
-        setActiveIcon(point.section);
-        if (withImpact && lastImpact !== point.section) {
-          lastImpact = point.section;
-          impact();
-        }
-      };
-
-      const activeElementBlocksSnap = () => {
-        const activeElement = document.activeElement as HTMLElement | null;
-        return Boolean(
-          activeElement &&
-            activeElement !== document.body &&
-          activeElement.closest("input, textarea, select, button, [contenteditable='true']")
-        );
-      };
-
-      const activeTransitionForScroll = () => {
-        const scrollY = window.scrollY;
-        return transitions.find((transition) => scrollY > transition.startY + 1 && scrollY < transition.endY - 1) ?? null;
-      };
-      let updateRestingCoinPosition = () => {};
-
-      const cancelSnap = () => {
-        isSnapping = false;
-        window.clearTimeout(snapTimer);
-        window.clearTimeout(landingTimer);
-        if (snapFrame) window.cancelAnimationFrame(snapFrame);
-        snapFrame = 0;
-      };
-
-      const finishSnap = (targetY: number, point: Waypoint, index: number) => {
-        isSnapping = false;
-        snapFrame = 0;
-        window.clearTimeout(landingTimer);
-        window.scrollTo({ top: targetY, left: 0, behavior: "auto" });
-        ScrollTrigger.update();
-        landAt(point, index);
-        landingTimer = window.setTimeout(() => {
-          if (Math.abs(window.scrollY - targetY) < 3) landAt(point, index);
-        }, 720);
-      };
-
-      const startSnap = (transition: CoinTransition, targetProgress: 0 | 1) => {
-        const point = targetProgress === 1 ? transition.to : transition.from;
-        const pointIndex = targetProgress === 1 ? transition.index + 1 : transition.index;
-        const targetY = Math.min(Math.max(targetProgress === 1 ? transition.endY : transition.startY, 0), maxScroll);
-        const startY = window.scrollY;
-        const distance = targetY - startY;
-
-        cancelSnap();
-
-        if (Math.abs(distance) < 2 || maxScroll <= 1) {
-          finishSnap(targetY, point, pointIndex);
-          return;
-        }
-
-        if (reducedMotion) {
-          window.scrollTo({ top: targetY, left: 0, behavior: "auto" });
-          finishSnap(targetY, point, pointIndex);
-          return;
-        }
-
-        const startedAt = performance.now();
-        const isMobileViewport = window.matchMedia("(max-width: 767px)").matches;
-        const duration = isMobileViewport ? 500 : 620;
-        isSnapping = true;
-
-        const tick = (now: number) => {
-          if (!isSnapping) return;
-
-          const progress = Math.min((now - startedAt) / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          const nextY = startY + distance * eased;
-          window.scrollTo({ top: nextY, left: 0, behavior: "auto" });
-          ScrollTrigger.update();
-
-          if (progress < 1) {
-            snapFrame = window.requestAnimationFrame(tick);
-            return;
-          }
-
-          finishSnap(targetY, point, pointIndex);
-        };
-
-        snapFrame = window.requestAnimationFrame(tick);
-      };
-
-      const snapToTransitionEndpoint = () => {
-        if (activeElementBlocksSnap()) return;
-
-        const transition = activeTransitionForScroll();
-        if (!transition) return;
-
-        const span = Math.max(1, transition.endY - transition.startY);
-        const progress = Math.min(Math.max((window.scrollY - transition.startY) / span, 0), 1);
-        startSnap(transition, progress > 0.15 ? 1 : 0);
-      };
-
-      const scheduleSnap = () => {
-        if (isSnapping) return;
-        window.clearTimeout(snapTimer);
-        const isMobileViewport = window.matchMedia("(max-width: 767px)").matches;
-        snapTimer = window.setTimeout(snapToTransitionEndpoint, isMobileViewport ? 120 : 180);
-      };
-
-      const onScrollActivity = () => {
-        if (!isSnapping) {
-          updateRestingCoinPosition();
-          scheduleSnap();
-        }
-      };
-
-      const onScrollInput = () => {
-        if (isSnapping) cancelSnap();
-        updateRestingCoinPosition();
-        scheduleSnap();
-      };
-
-      const onKeyDown = (event: KeyboardEvent) => {
-        if (!["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "].includes(event.key)) return;
-        onScrollInput();
-      };
-
-      window.addEventListener("scroll", onScrollActivity, { passive: true });
-      window.addEventListener("wheel", onScrollInput, { passive: true });
-      window.addEventListener("touchmove", onScrollInput, { passive: true });
-      window.addEventListener("keydown", onKeyDown);
-      cleanupTriggers.push({
-        kill: () => {
-          window.clearTimeout(snapTimer);
-          window.clearTimeout(landingTimer);
-          cancelSnap();
-          window.removeEventListener("scroll", onScrollActivity);
-          window.removeEventListener("wheel", onScrollInput);
-          window.removeEventListener("touchmove", onScrollInput);
-          window.removeEventListener("keydown", onKeyDown);
-        }
-      });
-
-      if (!playedEntrance) {
-        playedEntrance = true;
-        gsap.from(coin.querySelector<HTMLElement>(".coin-inner") ?? coin, {
-          scale: 0,
-          opacity: 0,
-          duration: 0.6,
-          ease: "back.out(1.7)",
-          onComplete: impact
-        });
-      }
-
-      const isMobileViewport = window.matchMedia("(max-width: 767px)").matches;
-      const boundaryOffset = Math.min(window.innerHeight * (isMobileViewport ? 0.34 : 0.38), isMobileViewport ? 220 : 360);
-      const fallbackHalfSpan = Math.min(window.innerHeight * 0.18, isMobileViewport ? 150 : 220);
-
-      for (let index = 0; index < waypoints.length - 1; index += 1) {
-        const from = waypoints[index];
-        const to = waypoints[index + 1];
-        const fromSection = from.slot.closest("section") as HTMLElement | null;
-        const toSection = to.slot.closest("section") as HTMLElement | null;
-        const boundaryY =
-          toSection?.offsetTop ??
-          (fromSection ? fromSection.offsetTop + fromSection.offsetHeight : to.center.y - window.innerHeight / 2);
-        let startY = Math.min(Math.max(boundaryY - window.innerHeight + boundaryOffset, 0), maxScroll);
-        let endY = Math.min(Math.max(boundaryY - boundaryOffset, 0), maxScroll);
-
-        if (endY <= startY + 24) {
-          const centerY = Math.min(Math.max(boundaryY - window.innerHeight / 2, 0), maxScroll);
-          startY = Math.min(Math.max(centerY - fallbackHalfSpan, 0), maxScroll);
-          endY = Math.min(Math.max(centerY + fallbackHalfSpan, 0), maxScroll);
-        }
-
-        const previous = transitions[transitions.length - 1];
-        if (previous && startY <= previous.endY) {
-          startY = Math.min(previous.endY + 1, maxScroll);
-          endY = Math.max(endY, Math.min(startY + 80, maxScroll));
-        }
-
-        if (endY <= startY) continue;
-
-        const tween = gsap.fromTo(
-          coin,
-          {
-            x: from.center.x,
-            y: from.center.y,
-            rotationY: reducedMotion ? 0 : index * 360
-          },
-          {
-            x: to.center.x,
-            y: to.center.y,
-            rotationY: reducedMotion ? 0 : (index + 1) * 360,
-            duration: 1,
-            ease: "none",
-            paused: true,
-            immediateRender: false
-          }
-        );
-        const transition: CoinTransition = {
-          index,
-          from,
-          to,
-          startY,
-          endY,
-          progress: 0,
-          tween
-        };
-        transitions.push(transition);
-
-        const trigger = ScrollTrigger.create({
-          trigger: document.documentElement,
-          start: () => transition.startY,
-          end: () => transition.endY,
-          invalidateOnRefresh: true,
-          onUpdate: (self: { progress: number }) => {
-            transition.progress = self.progress;
-            transition.tween.progress?.(self.progress);
-            coin.classList.toggle("is-traveling", self.progress > 0.02 && self.progress < 0.98);
-            setActiveIcon(self.progress >= 0.5 ? to.section : from.section);
-          },
-          onLeave: () => {
-            transition.progress = 1;
-            transition.tween.progress?.(1);
-            landAt(to, index + 1);
-          },
-          onLeaveBack: () => {
-            transition.progress = 0;
-            transition.tween.progress?.(0);
-            landAt(from, index);
-          }
-        });
-
-        cleanupTriggers.push(trigger, { kill: () => tween.kill() });
-      }
-
-      const sectionRanges: SectionRange[] = waypoints.map((point, index) => {
-        const section = point.slot.closest("section") as HTMLElement | null;
-        const previousTransition = transitions[index - 1];
-        const nextTransition = transitions[index];
-        const startY = previousTransition ? previousTransition.endY : 0;
-        const endY = nextTransition ? nextTransition.startY : maxScroll;
-        return {
-          index,
-          point,
-          startY,
-          endY: Math.max(startY, endY),
-          sectionBottom: section ? section.offsetTop + section.offsetHeight : point.center.y + window.innerHeight
-        };
-      });
-
-      updateRestingCoinPosition = () => {
-        if (activeTransitionForScroll()) return;
-
-        const scrollY = window.scrollY;
-        const currentRange =
-          sectionRanges.find((range) => scrollY >= range.startY - 1 && scrollY <= range.endY + 1) ??
-          sectionRanges.reduce((current, range) => (scrollY >= range.startY ? range : current), sectionRanges[0]);
-        if (!currentRange) return;
-
-        const stickyTop = isMobileViewport ? 88 : 112;
-        const stickyCenterY = scrollY + stickyTop + currentRange.point.height / 2;
-        const maxSectionY = Math.max(currentRange.point.center.y, currentRange.sectionBottom - currentRange.point.height / 2);
-        const isFinalRange = currentRange.index === waypoints.length - 1;
-        const y = isFinalRange
-          ? currentRange.point.center.y
-          : Math.min(Math.max(currentRange.point.center.y, stickyCenterY), maxSectionY);
-
-        coin.classList.remove("is-traveling");
-        gsap.set(coin, {
-          x: currentRange.point.center.x,
-          y,
-          rotationY: reducedMotion ? 0 : currentRange.index * 360,
-          opacity: 1
-        });
-        setActiveIcon(currentRange.point.section);
-      };
-
-      const syncCoinToScroll = () => {
-        const activeTransition = activeTransitionForScroll();
-        if (activeTransition) {
-          const span = Math.max(1, activeTransition.endY - activeTransition.startY);
-          const progress = Math.min(Math.max((window.scrollY - activeTransition.startY) / span, 0), 1);
-          activeTransition.tween.progress?.(progress);
-          setActiveIcon(progress >= 0.5 ? activeTransition.to.section : activeTransition.from.section);
-          coin.classList.toggle("is-traveling", progress > 0.02 && progress < 0.98);
-          return;
-        }
-
-        let landedIndex = 0;
-        transitions.forEach((transition) => {
-          if (window.scrollY >= transition.endY - 1) landedIndex = transition.index + 1;
-        });
-        updateRestingCoinPosition();
-        if (!sectionRanges.length) landAt(waypoints[landedIndex], landedIndex, false);
-      };
-
-      ScrollTrigger.refresh();
-      syncCoinToScroll();
-    };
-
-    const scheduleBuild = () => {
-      window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(build, 200);
-    };
-
-    const buildAfterStableLayout = () => {
-      const schedule = (callback: () => void) => {
-        const requestIdle = (
-          window as Window & {
-            requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
-          }
-        ).requestIdleCallback;
-
-        if (requestIdle) {
-          requestIdle(callback, { timeout: 1400 });
-          return;
-        }
-        window.setTimeout(callback, 320);
-      };
-      const fontReady = document.fonts?.ready ?? Promise.resolve();
-      fontReady.then(() => {
-        schedule(() => requestAnimationFrame(() => requestAnimationFrame(build)));
-      });
-    };
-
-    if (document.readyState === "complete") {
-      buildAfterStableLayout();
-    } else {
-      window.addEventListener("load", buildAfterStableLayout, { once: true });
-    }
-    window.addEventListener("resize", scheduleBuild);
-
-    return () => {
-      window.clearTimeout(resizeTimer);
-      window.removeEventListener("load", buildAfterStableLayout);
-      window.removeEventListener("resize", scheduleBuild);
-      killSetup();
-    };
-  }, [reducedMotion]);
-
-  return (
-    <div className="coin-travel-layer" aria-hidden="true">
-      <div ref={coinRef} className="heading-coin">
-        <div className="coin-shell coin-inner">
-          <span className="coin-face coin-face-front" data-coin-face>
-            <CoinFaceStack />
-          </span>
-          <span className="coin-face coin-face-back" data-coin-face>
-            <CoinFaceStack />
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function Home() {
-  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
-  const heroRef = useRef<HTMLElement>(null);
-  const reducedMotion = useReducedMotion();
-  const isMobile = useIsMobile();
-  const { scrollYProgress } = useScroll();
-  const { scrollYProgress: heroScrollProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"]
-  });
-  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 24, mass: 0.2 });
-  const heroY = useTransform(heroScrollProgress, [0, 1], [0, reducedMotion ? 0 : isMobile ? 52 : 150]);
-  const heroBackdropScale = useTransform(heroScrollProgress, [0, 1], [1, reducedMotion ? 1 : isMobile ? 1.06 : 1.15]);
-  const heroHeadingScale = useTransform(heroScrollProgress, [0, 0.85], [1, reducedMotion ? 1 : isMobile ? 0.98 : 0.93]);
-  const heroHeadingOpacity = useTransform(heroScrollProgress, [0, 0.85], [1, reducedMotion ? 1 : 0.36]);
-  const statZoom = useMemo(
-    () =>
-      createZoomVariant({
-        desktopScale: 0.8,
-        mobileScale: 0.95,
-        reducedMotion: Boolean(reducedMotion),
-        isMobile
-      }),
-    [isMobile, reducedMotion]
-  );
-  const experienceZoom = useMemo(
-    () =>
-      createZoomVariant({
-        desktopScale: 0.9,
-        mobileScale: 0.95,
-        y: 30,
-        staggerChildren: 0.1,
-        reducedMotion: Boolean(reducedMotion),
-        isMobile
-      }),
-    [isMobile, reducedMotion]
-  );
-  const projectZoom = useMemo(
-    () =>
-      createZoomVariant({
-        desktopScale: 0.85,
-        mobileScale: 0.95,
-        rotateX: 7,
-        staggerChildren: 0.08,
-        reducedMotion: Boolean(reducedMotion),
-        isMobile
-      }),
-    [isMobile, reducedMotion]
-  );
-  const tagFade = useMemo(
-    () =>
-      createZoomVariant({
-        desktopScale: 0.96,
-        mobileScale: 0.98,
-        delay: 0.1,
-        reducedMotion: Boolean(reducedMotion),
-        isMobile
-      }),
-    [isMobile, reducedMotion]
-  );
-  const skillPop = useMemo(
-    () =>
-      createZoomVariant({
-        desktopScale: 0.7,
-        mobileScale: 0.95,
-        staggerChildren: 0.08,
-        reducedMotion: Boolean(reducedMotion),
-        isMobile
-      }),
-    [isMobile, reducedMotion]
-  );
-
-  return (
-    <>
-      <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" strategy="lazyOnload" />
-      <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" strategy="lazyOnload" />
-      <main
-        className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_50%_0%,rgba(45,82,110,0.22),transparent_30%),linear-gradient(180deg,#050608_0%,#080b10_45%,#050608_100%)]"
-      >
-      <motion.div className="fixed left-0 top-0 z-50 h-1 origin-left bg-gradient-to-r from-cyanite via-ion to-ember" style={{ scaleX: progress }} />
-      <div className="pointer-events-none fixed inset-0 z-10 bg-[radial-gradient(520px_circle_at_50%_18%,rgba(125,211,252,0.1),transparent_44%)]" />
-      <HeadingPathCoin />
-
-      <header className="fixed left-0 right-0 top-0 z-40 px-4 py-4 sm:px-8 sm:py-5 lg:px-10">
-        <nav className="mx-auto max-w-7xl rounded-[1.75rem] border border-white/10 bg-ink/48 px-3 py-3 backdrop-blur-2xl sm:flex sm:items-center sm:gap-3 sm:rounded-full sm:px-4">
-          <div className="flex items-center gap-3">
-            <a href="#hero" className="text-sm font-semibold tracking-wide text-pearl">
-              KS
+    <main className="portfolio-page relative min-h-[100dvh] overflow-hidden">
+      <motion.div className="fixed left-0 top-0 z-[60] h-1 origin-left bg-[#77dfc0]" style={{ scaleX: progress }} />
+      <header className="fixed left-0 right-0 top-0 z-50 px-4 py-4 sm:px-6 sm:py-5">
+        <nav className="glass mx-auto max-w-[1240px] rounded-[1.35rem] px-3 py-3 sm:rounded-full sm:px-5" aria-label="Main navigation">
+          <div className="flex items-center justify-between gap-4">
+            <a data-testid="link-home" href="#hero" onClick={() => scrollTo('hero')} className="group flex items-center gap-3 text-sm font-semibold tracking-[.08em] text-[#eaf9f5]">
+              <span className="grid size-8 place-items-center rounded-full bg-[#dff7f2] font-mono text-xs font-bold text-[#0a1719] transition group-hover:rotate-12">KS</span>
+              <span className="hidden sm:block">KALAKONDA SAIRAM</span>
             </a>
-            <div className="hidden min-w-0 flex-1 items-center justify-center gap-6 px-1 text-sm text-haze sm:flex">
-              {["About", "Experience", "Projects", "Skills", "Contact"].map((item) => (
-                <a key={item} href={`#${item.toLowerCase()}`} className="shrink-0 transition hover:text-pearl">
-                  {item}
-                </a>
+            <div className="hidden items-center gap-7 md:flex">
+              {navItems.map((item) => (
+                <a data-testid={`link-nav-${item.id}`} key={item.id} href={`#${item.id}`} onClick={() => scrollTo(item.id)} className={`nav-link text-xs font-medium ${activeSection === item.id ? 'active' : ''}`}>{item.label}</a>
               ))}
             </div>
-            <button
-              type="button"
-              onClick={() => setIsMobileNavOpen((open) => !open)}
-              aria-expanded={isMobileNavOpen}
-              aria-controls="mobile-navigation"
-              aria-label="Toggle navigation menu"
-              className="ml-auto grid size-9 place-items-center rounded-full border border-white/10 text-haze transition hover:border-white/24 hover:text-pearl sm:hidden"
-            >
-              {isMobileNavOpen ? <X size={17} aria-hidden="true" /> : <Menu size={17} aria-hidden="true" />}
-            </button>
-            <a
-              href="https://www.linkedin.com/in/sairam-kalakonda/"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Open LinkedIn profile"
-              className="grid size-9 place-items-center rounded-full border border-white/10 text-haze transition hover:border-white/24 hover:text-pearl"
-            >
-              <Linkedin size={16} aria-hidden="true" />
-            </a>
+            <div className="flex items-center gap-2">
+              <a data-testid="link-linkedin-header" href="https://www.linkedin.com/in/sairam-kalakonda/" target="_blank" rel="noreferrer" aria-label="Open LinkedIn profile" className="grid size-9 place-items-center rounded-full border border-[rgba(194,224,222,.16)] text-[#9ab0b0] transition hover:border-[#77dfc0] hover:text-[#dff7f2]"><Linkedin size={15} aria-hidden="true" /></a>
+              <button data-testid="button-toggle-navigation" type="button" aria-expanded={mobileNavOpen} aria-controls="mobile-navigation" aria-label="Toggle navigation menu" onClick={() => setMobileNavOpen((open) => !open)} className="grid size-9 place-items-center rounded-full border border-[rgba(194,224,222,.16)] text-[#9ab0b0] md:hidden">
+                {mobileNavOpen ? <X size={17} aria-hidden="true" /> : <Menu size={17} aria-hidden="true" />}
+              </button>
+            </div>
           </div>
-          {isMobileNavOpen && (
-            <motion.div
-              id="mobile-navigation"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              transition={{ duration: 0.24, ease: premiumEase }}
-              className="mt-3 overflow-hidden border-t border-white/10 pt-2 sm:hidden"
-            >
-              {["About", "Experience", "Projects", "Skills", "Contact"].map((item) => (
-                <a
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  onClick={() => setIsMobileNavOpen(false)}
-                  className="block rounded-2xl px-3 py-2.5 text-sm text-haze transition hover:bg-white/[0.06] hover:text-pearl"
-                >
-                  {item}
-                </a>
-              ))}
-            </motion.div>
-          )}
+          <AnimatePresence initial={false}>
+            {mobileNavOpen && (
+              <motion.div id="mobile-navigation" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="mt-3 overflow-hidden border-t hairline pt-2 md:hidden">
+                {navItems.map((item) => <a data-testid={`link-mobile-nav-${item.id}`} key={item.id} href={`#${item.id}`} onClick={() => scrollTo(item.id)} className="block rounded-xl px-3 py-3 text-sm text-[#9ab0b0] hover:bg-[rgba(119,223,192,.08)] hover:text-[#eaf9f5]">{item.label}</a>)}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </nav>
       </header>
 
-      <section ref={heroRef} id="hero" className="relative flex min-h-[92svh] items-center px-5 pb-10 pt-24 sm:min-h-screen sm:px-8 sm:pb-16 sm:pt-28 lg:px-10">
-        <motion.div style={{ y: heroY, scale: heroBackdropScale }} className="absolute inset-0">
-          <Image
-            src="/images/hero-technology-backdrop.png"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover opacity-50"
-          />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(5,6,8,0.18),#050608_72%)]" />
-        </motion.div>
-        <ParticleField />
-        <div className="noise absolute inset-0 opacity-35" />
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          animate="visible"
-          style={{ scale: heroHeadingScale, opacity: heroHeadingOpacity }}
-          className="relative z-20 mx-auto grid w-full max-w-7xl origin-top items-end gap-8 sm:gap-12 lg:grid-cols-[1.15fr_0.85fr]"
-        >
-          <div>
-            <motion.p variants={fadeUp} className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-4 py-2 text-sm text-haze backdrop-blur-xl">
-              <Sparkles size={15} className="text-cyanite" aria-hidden="true" />
-              Enterprise AI, SAP B1, and scalable full-stack delivery
-            </motion.p>
-            <div className="section-heading-wrapper section-heading--right hero-heading-wrapper">
-              <motion.h1 variants={fadeUp} className="text-balance text-5xl font-semibold tracking-[-0.05em] text-white sm:text-7xl lg:text-8xl">
-                Kalakonda Sairam
-              </motion.h1>
-              <div className="coin-slot" data-section="hero" data-side="right" />
+      <section id="hero" className="relative flex min-h-[100dvh] items-center overflow-hidden px-5 pb-16 pt-32 sm:px-8 lg:px-10">
+        <div className="hero-grid absolute inset-0 opacity-70" />
+        <div className="grain absolute inset-0" />
+        <div className="orbit orbit-a" /><div className="orbit orbit-b" />
+        <motion.div style={{ y: heroY }} className="relative z-10 mx-auto w-full max-w-[1240px]">
+          <div className="grid items-end gap-14 lg:grid-cols-[1.12fr_.88fr]">
+            <div>
+              <MotionReveal>
+                <p className="mb-7 inline-flex items-center gap-2 rounded-full border border-[rgba(119,223,192,.26)] bg-[rgba(119,223,192,.06)] px-4 py-2 font-mono text-[10px] uppercase tracking-[.14em] text-[#9fe9d0]"><span className="status-dot" /> Available for intelligent enterprise systems</p>
+              </MotionReveal>
+              <MotionReveal delay={.07}>
+                <p className="eyebrow mb-5">AI-enabled full stack engineer</p>
+                <h1 data-testid="text-name" className="display max-w-4xl text-[clamp(3.6rem,10vw,8.8rem)] font-semibold leading-[.86] tracking-[-.08em] text-[#eaf9f5]">Kalakonda<br /><span className="text-[#77dfc0]">Sairam<span className="text-[#ffbc6e]">.</span></span></h1>
+              </MotionReveal>
+              <MotionReveal delay={.15}>
+                <p className="mt-8 max-w-xl text-lg leading-8 text-[#9ab0b0] sm:text-xl">Building Intelligent Enterprise Experiences.<br />Transforming SAP Workflows with AI.</p>
+              </MotionReveal>
+              <MotionReveal delay={.22} className="mt-9 flex flex-col gap-3 sm:flex-row">
+                <MagneticLink href="#projects">View selected work <ArrowDown size={16} aria-hidden="true" /></MagneticLink>
+                <MagneticLink href="/K_Sairam_Resume.pdf" variant="quiet" download>Download resume <Download size={16} aria-hidden="true" /></MagneticLink>
+              </MotionReveal>
             </div>
-            <motion.h2 variants={fadeUp} className="mt-4 text-2xl font-medium tracking-[-0.01em] text-cyanite sm:mt-5 sm:text-3xl">
-              AI-Enabled Full Stack Engineer
-            </motion.h2>
-            <motion.div variants={fadeUp} className="mt-4 max-w-2xl sm:mt-6">
-              <RotatingSubtitle />
-            </motion.div>
-            <motion.div variants={fadeUp} className="mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row">
-              <MagneticButton href="#projects">
-                View Projects <ArrowDown size={17} aria-hidden="true" />
-              </MagneticButton>
-              <MagneticButton href="/K_Sairam_Resume.pdf" variant="secondary" download>
-                Download Resume <Download size={17} aria-hidden="true" />
-              </MagneticButton>
-            </motion.div>
-          </div>
-          <motion.div variants={fadeUp} className="hidden justify-self-end lg:block">
-            <div className="relative w-[360px] rounded-[2rem] border border-white/12 bg-white/[0.04] p-5 shadow-lift backdrop-blur-2xl">
-              <div className="absolute -inset-px rounded-[2rem] bg-gradient-to-br from-cyanite/30 via-transparent to-ember/20 opacity-70" />
-              <div className="relative space-y-4">
-                {["SAP B1 Copilot", "WhatsApp approvals", "HANA optimization", "ASP.NET MVC portals"].map((item, index) => (
-                  <div
-                    key={item}
-                    className="rounded-2xl border border-white/10 bg-ink/58 p-4"
-                  >
-                    <p className="text-sm text-haze">Capability 0{index + 1}</p>
-                    <p className="mt-1 font-medium text-pearl">{item}</p>
-                  </div>
-                ))}
+            <MotionReveal delay={.3} className="hidden lg:block">
+              <div className="glass relative overflow-hidden rounded-[2rem] p-6 shadow-[0_30px_80px_rgba(0,0,0,.3)]">
+                <div className="mb-8 flex items-center justify-between border-b hairline pb-4 font-mono text-[10px] uppercase tracking-[.16em] text-[#769091]"><span>System / Sairam</span><span>01—04</span></div>
+                <div className="space-y-3">
+                  {['SAP B1 Copilot', 'WhatsApp approvals', 'HANA optimization', 'ASP.NET MVC portals'].map((item, index) => (
+                    <div data-testid={`card-capability-${index + 1}`} key={item} className="group flex items-center justify-between rounded-2xl border border-[rgba(194,224,222,.11)] bg-[rgba(5,18,21,.62)] p-4 transition hover:border-[rgba(119,223,192,.35)]">
+                      <div><p className="font-mono text-[10px] text-[#769091]">CAPABILITY 0{index + 1}</p><p className="mt-1 text-sm font-semibold text-[#dff7f2]">{item}</p></div><ArrowUpRight size={17} className="text-[#769091] transition group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-[#77dfc0]" aria-hidden="true" />
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-7 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[.14em] text-[#77dfc0]"><span className="size-1.5 rounded-full bg-[#77dfc0]" /> Enterprise-grade by default</div>
               </div>
-            </div>
-          </motion.div>
+            </MotionReveal>
+          </div>
+          <div className="mt-20 flex items-center gap-4 text-[#769091]"><span className="scroll-cue h-px w-12 origin-left bg-[#77dfc0]" /><span className="font-mono text-[10px] uppercase tracking-[.16em]">Scroll to explore</span></div>
         </motion.div>
       </section>
 
-      <Section id="about" eyebrow="About" title="Enterprise engineering with an AI-first operating model.">
-        <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-          <motion.p variants={fadeUp} className="text-balance text-xl leading-9 text-haze sm:text-2xl">
-            Kalakonda Sairam is an AI-enabled full stack engineer with 4+ years of experience delivering enterprise-grade solutions across ASP.NET MVC, Angular, SAP Business One, and SAP HANA. His work connects reliable application architecture with practical AI Copilot implementations, workflow automation, and measurable performance gains.
-          </motion.p>
-          <motion.div variants={stagger} className="grid grid-cols-2 gap-4">
-            {stats.map(([value, label], index) => (
-              <motion.div
-                key={label}
-                variants={statZoom}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.55 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -6, scale: 1.02 }}
-                className="rounded-3xl border border-white/10 bg-white/[0.045] p-5 backdrop-blur-xl"
-              >
-                <p className="text-4xl font-semibold tracking-[-0.04em] text-white">{value}</p>
-                <p className="mt-3 text-sm leading-6 text-haze">{label}</p>
-              </motion.div>
-            ))}
-          </motion.div>
+      <section id="about" className="section-wrap">
+        <SectionHeading eyebrow="About / 01" title="Enterprise engineering with an AI-first operating model." note="Reliable architecture, practical automation, measurable gains." />
+        <div className="grid gap-12 lg:grid-cols-[.9fr_1.1fr] lg:gap-20">
+          <MotionReveal><p data-testid="text-biography" className="text-xl leading-9 text-[#a9bcbc] sm:text-2xl">Kalakonda Sairam is an AI-enabled full stack engineer with 4+ years of experience delivering enterprise-grade solutions across ASP.NET MVC, Angular, SAP Business One, and SAP HANA. His work connects reliable application architecture with practical AI Copilot implementations, workflow automation, and measurable performance gains.</p></MotionReveal>
+          <div className="grid grid-cols-2 gap-x-5 gap-y-9 sm:grid-cols-4 lg:pt-2">{stats.map(([value, label], index) => <MotionReveal key={label} delay={index * .07}><div className="metric"><strong data-testid={`text-stat-${index}`}>{value}</strong><span>{label}</span></div></MotionReveal>)}</div>
         </div>
-      </Section>
+      </section>
 
-      <Section id="experience" eyebrow="Experience" title="Built inside high-pressure enterprise delivery environments.">
-        <div className="relative">
-          <div className="absolute left-4 top-0 hidden h-full w-px bg-gradient-to-b from-cyanite/0 via-cyanite/40 to-cyanite/0 md:block" />
-          <div className="space-y-8">
-            {experience.map((item) => (
-              <motion.article
-                key={item.company}
-                variants={experienceZoom}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.32 }}
-                className="relative rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl md:ml-14 md:p-8"
-              >
-                <span className="absolute -left-[3.85rem] top-8 hidden size-8 rounded-full border border-cyanite/40 bg-ink shadow-[0_0_26px_rgba(125,211,252,0.35)] md:block" />
-                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                  <div>
-                    <h3 className="text-2xl font-semibold tracking-[-0.02em] text-white">{item.company}</h3>
-                    <p className="mt-2 text-cyanite">{item.role}</p>
-                  </div>
-                  <p className="rounded-full border border-white/10 px-4 py-2 text-sm text-haze">{item.period}</p>
-                </div>
-                <ul className="mt-7 grid gap-3 sm:grid-cols-2">
-                  {item.points.map((point) => (
-                    <motion.li key={point} variants={fadeUp} className="flex gap-3 text-sm leading-6 text-haze">
-                      <Zap size={16} className="mt-1 shrink-0 text-ion" aria-hidden="true" />
-                      {point}
-                    </motion.li>
-                  ))}
-                </ul>
-              </motion.article>
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      <Section id="projects" eyebrow="Projects" title="Selected systems that turn enterprise friction into intelligent workflows.">
-        <motion.div variants={stagger} className="grid gap-5 md:grid-cols-2">
-          {projects.map((project) => {
-            const Icon = project.icon;
-            return (
-              <motion.article
-                key={project.title}
-                variants={projectZoom}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.28 }}
-                whileHover={{ y: -8, scale: 1.015 }}
-                className="group relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.045] p-6 shadow-lift backdrop-blur-xl [transform-style:preserve-3d] md:min-h-[320px]"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-cyanite/14 via-transparent to-ember/10 opacity-0 transition duration-500 group-hover:opacity-100" />
-                <div className="relative">
-                  <motion.div
-                    whileHover={{ rotate: -6, scale: 1.08 }}
-                    className="mb-7 grid size-14 place-items-center rounded-2xl border border-white/12 bg-ink/70 text-cyanite"
-                  >
-                    <Icon size={24} aria-hidden="true" />
-                  </motion.div>
-                  <h3 className="text-2xl font-semibold tracking-[-0.02em] text-white">{project.title}</h3>
-                  <p className="mt-3 text-base leading-7 text-haze">{project.description}</p>
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {project.tech.map((tech) => (
-                      <motion.span key={tech} variants={tagFade} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-haze">
-                        {tech}
-                      </motion.span>
-                    ))}
-                  </div>
-                  <div className="mt-7 grid gap-4 opacity-100 transition duration-500 md:translate-y-5 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100">
-                    <p className="text-sm leading-6 text-haze">
-                      <span className="text-pearl">Problem solved:</span> {project.problem}
-                    </p>
-                    <p className="text-sm leading-6 text-haze">
-                      <span className="text-pearl">Business impact:</span> {project.impact}
-                    </p>
-                  </div>
-                </div>
-              </motion.article>
-            );
-          })}
-        </motion.div>
-      </Section>
-
-      <Section id="skills" eyebrow="Skills" title="A practical stack for SAP-aware, AI-enabled product engineering.">
-        <motion.div variants={stagger} className="grid gap-5 lg:grid-cols-5">
-          {Object.entries(skills).map(([category, items]) => (
-            <motion.div
-              key={category}
-              variants={skillPop}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.42 }}
-              className="rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-5"
-            >
-              <h3 className="mb-5 flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-cyanite">
-                <Code2 size={16} aria-hidden="true" />
-                {category}
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {items.map((skill) => (
-                  <motion.span
-                    key={skill}
-                    variants={skillPop}
-                    className="rounded-full border border-white/10 bg-white/[0.055] px-3 py-2 text-sm text-haze shadow-sm"
-                  >
-                    {skill}
-                  </motion.span>
-                ))}
-              </div>
-            </motion.div>
+      <section id="experience" className="section-wrap border-t hairline">
+        <SectionHeading eyebrow="Experience / 02" title="Built inside high-pressure enterprise delivery environments." note="A bias toward the useful: ship, measure, refine." />
+        <div className="relative space-y-6">
+          <div className="timeline-line absolute bottom-4 left-[7px] top-4 hidden w-px md:block" />
+          {experience.map((item, index) => (
+            <MotionReveal key={item.company} delay={index * .1} className="relative md:pl-14">
+              <span className="absolute left-0 top-8 hidden size-4 rounded-full border-2 border-[#77dfc0] bg-[#071014] md:block" />
+              <article data-testid={`card-experience-${index}`} className="glass rounded-[1.75rem] p-6 sm:p-8">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div><p className="font-mono text-[10px] uppercase tracking-[.16em] text-[#77dfc0]">0{index + 1} / {item.role}</p><h3 className="display mt-3 text-3xl font-semibold tracking-[-.04em] text-[#eaf9f5]">{item.company}</h3></div><p className="w-fit rounded-full border border-[rgba(194,224,222,.17)] px-3 py-2 font-mono text-[10px] text-[#8da7a7]">{item.period}</p></div>
+                <ul className="mt-8 grid gap-4 sm:grid-cols-2">{item.points.map((point) => <li data-testid={`text-experience-point-${index}-${item.points.indexOf(point)}`} key={point} className="flex gap-3 text-sm leading-6 text-[#a9bcbc]"><Zap size={15} className="mt-1 shrink-0 text-[#ffbc6e]" aria-hidden="true" />{point}</li>)}</ul>
+              </article>
+            </MotionReveal>
           ))}
-        </motion.div>
-      </Section>
-
-      <Section id="achievements" eyebrow="Achievements" title="Recognition and outcomes shaped by measurable engineering impact.">
-        <motion.div variants={stagger} className="grid gap-4 md:grid-cols-5">
-          {achievements.map(([achievement, icon]) => {
-            const Icon = icon as typeof Trophy;
-            return (
-              <motion.div
-                key={achievement as string}
-                variants={fadeUp}
-                whileHover={{ y: -6 }}
-                className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-5"
-              >
-                <div className="absolute inset-x-8 -top-16 h-28 rounded-full bg-cyanite/20 blur-3xl transition group-hover:bg-cyanite/30" />
-                <Icon size={22} className="relative text-ember" aria-hidden="true" />
-                <p className="relative mt-6 text-base font-medium leading-7 text-pearl">{achievement as string}</p>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-      </Section>
-
-      <Section id="contact" eyebrow="Contact" title="Let's Build Something Intelligent">
-        <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
-          <motion.div variants={fadeUp} className="rounded-[2rem] border border-white/10 bg-white/[0.045] p-7 backdrop-blur-xl sm:p-9">
-            <p className="text-xl leading-9 text-haze">
-              Available for enterprise full-stack engineering, SAP Business One extensions, AI copilots, workflow automation, and performance-focused application modernization.
-            </p>
-            <a
-              href="mailto:sairamkalakonda1998@gmail.com"
-              className="mt-8 inline-flex items-center gap-2 text-lg font-semibold text-pearl transition hover:text-cyanite"
-            >
-              Start a conversation <ArrowUpRight size={20} aria-hidden="true" />
-            </a>
-          </motion.div>
-          <motion.div variants={stagger} className="rounded-[2rem] border border-white/10 bg-ink/58 px-6 backdrop-blur-xl">
-            <ContactAction icon={Mail} label="Email" value="sairamkalakonda1998@gmail.com" href="mailto:sairamkalakonda1998@gmail.com" />
-            <ContactAction icon={Phone} label="Phone" value="+91 7013883110" href="tel:+917013883110" />
-            <ContactAction icon={Linkedin} label="LinkedIn" value="https://www.linkedin.com/in/sairam-kalakonda/" href="https://www.linkedin.com/in/sairam-kalakonda/" />
-          </motion.div>
         </div>
-      </Section>
+      </section>
 
-      <footer className="px-5 py-10 text-center text-sm text-haze sm:px-8 lg:px-10">
-        Designed and engineered by Kalakonda Sairam.
+      <section id="projects" className="section-wrap border-t hairline">
+        <SectionHeading eyebrow="Selected work / 03" title="Systems that turn enterprise friction into intelligent workflows." note="The work lives where software meets the way teams actually operate." />
+        <div className="grid gap-5 md:grid-cols-2">
+          {projects.map((project, index) => {
+            const Icon = project.icon;
+            return <MotionReveal key={project.title} delay={index * .08}><article data-testid={`card-project-${index}`} className="project-card glass group min-h-[360px] rounded-[1.75rem] p-6 sm:p-8">
+              <div className="relative z-10 flex h-full flex-col"><div className="mb-10 flex items-center justify-between"><div className="grid size-12 place-items-center rounded-2xl border border-[rgba(119,223,192,.24)] bg-[rgba(119,223,192,.07)] text-[#77dfc0]"><Icon size={22} aria-hidden="true" /></div><span className="font-mono text-[10px] tracking-[.16em] text-[#769091]">{project.index}</span></div><h3 className="display text-3xl font-semibold tracking-[-.045em] text-[#eaf9f5]">{project.title}</h3><p className="mt-3 max-w-md leading-7 text-[#9ab0b0]">{project.description}</p><div className="mt-5 flex flex-wrap gap-2">{project.tech.map((tech) => <span key={tech} className="skill-pill rounded-full border border-[rgba(194,224,222,.14)] px-3 py-1.5 font-mono text-[10px] text-[#8da7a7]">{tech}</span>)}</div><div className="mt-auto grid gap-3 border-t hairline pt-5 md:translate-y-3 md:opacity-0 md:transition md:duration-500 md:group-hover:translate-y-0 md:group-hover:opacity-100"><p className="text-xs leading-5 text-[#8da7a7]"><span className="text-[#dff7f2]">Problem solved / </span>{project.problem}</p><p className="text-xs leading-5 text-[#8da7a7]"><span className="text-[#dff7f2]">Business impact / </span>{project.impact}</p></div></div>
+            </article></MotionReveal>;
+          })}
+        </div>
+      </section>
+
+      <section id="skills" className="section-wrap border-t hairline">
+        <SectionHeading eyebrow="Capabilities / 04" title="A practical stack for SAP-aware, AI-enabled product engineering." note="Deep where it matters. Comfortable across the whole system." />
+        <div className="grid gap-4 lg:grid-cols-5">{Object.entries(skills).map(([category, items], index) => <MotionReveal key={category} delay={index * .06}><article data-testid={`card-skill-${category.toLowerCase()}`} className="rounded-[1.5rem] border border-[rgba(194,224,222,.13)] bg-[rgba(17,34,39,.42)] p-5"><h3 className="mb-6 flex items-center gap-2 font-mono text-[10px] font-medium uppercase tracking-[.16em] text-[#77dfc0]"><Code2 size={14} aria-hidden="true" />{category}</h3><div className="flex flex-wrap gap-2">{items.map((skill) => <span data-testid={`text-skill-${skill.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} key={skill} className="skill-pill rounded-full border border-[rgba(194,224,222,.12)] bg-[rgba(194,224,222,.035)] px-3 py-2 text-xs text-[#a9bcbc]">{skill}</span>)}</div></article></MotionReveal>)}</div>
+      </section>
+
+      <section id="achievements" className="section-wrap border-t hairline">
+        <SectionHeading eyebrow="Recognition / 05" title="Outcomes shaped by measurable engineering impact." />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">{achievements.map(([achievement, Icon], index) => <MotionReveal key={achievement} delay={index * .06}><article data-testid={`card-achievement-${index}`} className="glass group relative min-h-[190px] overflow-hidden rounded-[1.5rem] p-5 transition hover:-translate-y-1 hover:border-[rgba(119,223,192,.4)]"><div className="absolute -right-4 -top-5 size-24 rounded-full bg-[rgba(119,223,192,.1)] blur-2xl transition group-hover:bg-[rgba(255,188,110,.18)]" /><Icon size={21} className="relative text-[#ffbc6e]" aria-hidden="true" /><p className="relative mt-12 text-base font-semibold leading-6 text-[#dff7f2]">{achievement}</p></article></MotionReveal>)}</div>
+      </section>
+
+      <section id="contact" className="section-wrap border-t hairline pb-16">
+        <SectionHeading eyebrow="Contact / 06" title="Let's build something intelligent." note="Good systems begin with a clear problem and a direct conversation." />
+        <div className="grid gap-7 lg:grid-cols-[.9fr_1.1fr]">
+          <MotionReveal><div className="relative overflow-hidden rounded-[2rem] bg-[#dff7f2] p-7 text-[#0a1719] sm:p-10"><div className="absolute -right-8 -top-12 size-48 rounded-full border border-[#0a1719]/10" /><div className="absolute -right-16 -top-20 size-72 rounded-full border border-[#0a1719]/10" /><Mail size={22} className="relative mb-16" aria-hidden="true" /><p className="display relative max-w-md text-3xl font-semibold leading-[1.05] tracking-[-.05em] sm:text-4xl">Available for enterprise full-stack engineering, SAP Business One extensions, AI copilots, workflow automation, and performance-focused application modernization.</p><a data-testid="link-start-conversation" href="mailto:sairamkalakonda1998@gmail.com" className="relative mt-9 inline-flex items-center gap-2 text-sm font-bold transition hover:gap-4">Start a conversation <ArrowUpRight size={18} aria-hidden="true" /></a></div></MotionReveal>
+          <MotionReveal delay={.1}><div className="glass rounded-[2rem] px-6 sm:px-8"><ContactAction icon={Mail} label="Email" value="sairamkalakonda1998@gmail.com" href="mailto:sairamkalakonda1998@gmail.com" /><ContactAction icon={Phone} label="Phone" value="+91 7013883110" href="tel:+917013883110" /><ContactAction icon={Linkedin} label="LinkedIn" value="linkedin.com/in/sairam-kalakonda" href="https://www.linkedin.com/in/sairam-kalakonda/" /></div></MotionReveal>
+        </div>
+      </section>
+
+      <footer className="border-t hairline px-5 py-8 sm:px-8">
+        <div className="mx-auto flex max-w-[1240px] flex-col justify-between gap-3 text-xs text-[#769091] sm:flex-row"><span>Designed and engineered by Kalakonda Sairam.</span><span className="font-mono">© {new Date().getFullYear()} / KS</span></div>
       </footer>
     </main>
-    </>
   );
 }
+
+export default PortfolioHome;
