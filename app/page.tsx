@@ -10,7 +10,6 @@ import {
 import { type LucideIcon } from 'lucide-react';
 import FadeIn from './components/FadeIn';
 import Magnet from './components/Magnet';
-import AnimatedText from './components/AnimatedText';
 
 const premiumEase = [0.22, 1, 0.36, 1] as const;
 
@@ -435,11 +434,9 @@ function PortfolioHome() {
         <SectionHeading eyebrow="About / 01" title="Enterprise engineering with an AI-first operating model." note="Reliable architecture, practical automation, measurable gains." />
         <div className="grid gap-12 lg:grid-cols-[.9fr_1.1fr] lg:gap-20">
           <FadeIn>
-            <AnimatedText
-              text="Kalakonda Sairam is an AI-enabled full stack engineer with 4+ years of experience delivering enterprise-grade solutions across ASP.NET MVC, Angular, SAP Business One, and SAP HANA. His work connects reliable application architecture with practical AI Copilot implementations, workflow automation, and measurable performance gains."
-              className="text-xl leading-9 text-[#a9bcbc] sm:text-2xl"
-              scrollOffset={["start 0.85", "end 0.3"]}
-            />
+            <p data-testid="text-biography" className="text-xl leading-9 text-[#a9bcbc] sm:text-2xl">
+              Kalakonda Sairam is an AI-enabled full stack engineer with 4+ years of experience delivering enterprise-grade solutions across ASP.NET MVC, Angular, SAP Business One, and SAP HANA. His work connects reliable application architecture with practical AI Copilot implementations, workflow automation, and measurable performance gains.
+            </p>
           </FadeIn>
           <div className="grid grid-cols-2 gap-x-10 gap-y-10 lg:pt-2">
             {stats.map(([value, label], index) => (
