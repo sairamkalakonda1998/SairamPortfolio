@@ -371,9 +371,8 @@ function PortfolioHome() {
           </FadeIn>
           <FadeIn delay={0.3} y={40} className="w-full">
             <p className="eyebrow justify-center mb-5">AI-enabled full stack engineer</p>
-            <h1 data-testid="text-name" className="display mx-auto max-w-4xl text-[clamp(3.6rem,10vw,8.8rem)] font-semibold leading-[.86] tracking-[-.08em] text-[#eaf9f5]">
-              Kalakonda<br />
-              <span className="gradient-text-shimmer">Sairam<span className="text-[#ffbc6e]" style={{ WebkitTextFillColor: '#ffbc6e' }}>.</span></span>
+            <h1 data-testid="text-name" className="display mx-auto w-full max-w-5xl text-[clamp(1.85rem,7.2vw,6.4rem)] font-semibold leading-[1.08] tracking-[-.06em] text-[#eaf9f5] whitespace-nowrap">
+              Kalakonda <span className="gradient-text-shimmer">Sairam<span className="text-[#ffbc6e]" style={{ WebkitTextFillColor: '#ffbc6e' }}>.</span></span>
             </h1>
           </FadeIn>
           <FadeIn delay={0.5} y={25}>
