@@ -303,21 +303,30 @@ function PortfolioHome() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: premiumEase }}
         >
-          <div className="flex items-center justify-between gap-4">
-            <Magnet padding={60} strength={6}>
-              <a data-testid="link-home" href="#hero" onClick={() => scrollTo('hero')} className="group flex items-center gap-3 text-sm font-semibold tracking-[.08em] text-[#eaf9f5]">
-                <span className="grid size-8 place-items-center rounded-full bg-[#dff7f2] font-mono text-xs font-bold text-[#0a1719] transition group-hover:rotate-12">KS</span>
-                <span className="hidden sm:block">KALAKONDA SAIRAM</span>
+          <div className="relative flex items-center justify-between">
+            <Magnet padding={40} strength={5}>
+              <a
+                data-testid="link-home"
+                href="#hero"
+                onClick={() => scrollTo('hero')}
+                className="group flex items-center"
+                aria-label="Kalakonda Sairam Home"
+              >
+                <span className="grid size-9 place-items-center rounded-full bg-[#dff7f2] font-mono text-xs font-bold text-[#0a1719] transition-transform duration-300 group-hover:rotate-12 group-hover:scale-105">
+                  KS
+                </span>
               </a>
             </Magnet>
-            <div className="hidden items-center gap-7 md:flex">
+
+            {/* Centered Navigation Links */}
+            <div className="hidden items-center gap-8 md:flex absolute left-1/2 -translate-x-1/2">
               {navItems.map((item, i) => (
                 <motion.a
                   data-testid={`link-nav-${item.id}`}
                   key={item.id}
                   href={`#${item.id}`}
                   onClick={() => scrollTo(item.id)}
-                  className={`nav-link text-xs font-medium ${activeSection === item.id ? 'active' : ''}`}
+                  className={`nav-link text-xs font-medium tracking-wider uppercase ${activeSection === item.id ? 'active text-[#eaf9f5]' : 'text-[#9ab0b0]'}`}
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.1 + i * 0.06, ease: premiumEase }}
@@ -326,11 +335,30 @@ function PortfolioHome() {
                 </motion.a>
               ))}
             </div>
+
+            {/* Right Actions */}
             <div className="flex items-center gap-2">
               <Magnet padding={40} strength={5}>
-                <a data-testid="link-linkedin-header" href="https://www.linkedin.com/in/sairam-kalakonda/" target="_blank" rel="noreferrer" aria-label="Open LinkedIn profile" className="grid size-9 place-items-center rounded-full border border-[rgba(194,224,222,.16)] text-[#9ab0b0] transition hover:border-[#77dfc0] hover:text-[#dff7f2]"><Linkedin size={15} aria-hidden="true" /></a>
+                <a
+                  data-testid="link-linkedin-header"
+                  href="https://www.linkedin.com/in/sairam-kalakonda/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Open LinkedIn profile"
+                  className="grid size-9 place-items-center rounded-full border border-[rgba(194,224,222,.16)] text-[#9ab0b0] transition-colors hover:border-[#77dfc0] hover:text-[#dff7f2]"
+                >
+                  <Linkedin size={15} aria-hidden="true" />
+                </a>
               </Magnet>
-              <button data-testid="button-toggle-navigation" type="button" aria-expanded={mobileNavOpen} aria-controls="mobile-navigation" aria-label="Toggle navigation menu" onClick={() => setMobileNavOpen((open) => !open)} className="grid size-9 place-items-center rounded-full border border-[rgba(194,224,222,.16)] text-[#9ab0b0] md:hidden">
+              <button
+                data-testid="button-toggle-navigation"
+                type="button"
+                aria-expanded={mobileNavOpen}
+                aria-controls="mobile-navigation"
+                aria-label="Toggle navigation menu"
+                onClick={() => setMobileNavOpen((open) => !open)}
+                className="grid size-9 place-items-center rounded-full border border-[rgba(194,224,222,.16)] text-[#9ab0b0] md:hidden"
+              >
                 {mobileNavOpen ? <X size={17} aria-hidden="true" /> : <Menu size={17} aria-hidden="true" />}
               </button>
             </div>
