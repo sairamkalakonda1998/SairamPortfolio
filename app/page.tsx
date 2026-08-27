@@ -359,50 +359,46 @@ function PortfolioHome() {
       </header>
 
       {/* ── Hero Section ──────────────────────────────────── */}
-      <section id="hero" className="relative flex min-h-[100dvh] items-center overflow-hidden px-5 pb-16 pt-32 sm:px-8 lg:px-10">
+      <section id="hero" className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden px-5 pb-16 pt-32 sm:px-8 lg:px-10">
         <div className="hero-grid absolute inset-0 opacity-70" />
         <div className="grain absolute inset-0" />
         <div className="orbit orbit-a" /><div className="orbit orbit-b" />
-        <motion.div style={{ y: heroY }} className="relative z-10 mx-auto w-full max-w-[1240px]">
-          <div className="grid items-end gap-14 lg:grid-cols-[1.12fr_.88fr]">
-            <div>
-              <FadeIn delay={0.15} y={20}>
-                <p className="mb-7 inline-flex items-center gap-2 rounded-full border border-[rgba(119,223,192,.26)] bg-[rgba(119,223,192,.06)] px-4 py-2 font-mono text-[10px] uppercase tracking-[.14em] text-[#9fe9d0]"><span className="status-dot" />Available for intelligent enterprise systems</p>
-              </FadeIn>
-              <FadeIn delay={0.3} y={40}>
-                <p className="eyebrow mb-5">AI-enabled full stack engineer</p>
-                <h1 data-testid="text-name" className="display max-w-4xl text-[clamp(3.6rem,10vw,8.8rem)] font-semibold leading-[.86] tracking-[-.08em] text-[#eaf9f5]">Kalakonda<br /><span className="gradient-text-shimmer">Sairam<span className="text-[#ffbc6e]" style={{ WebkitTextFillColor: '#ffbc6e' }}>.</span></span></h1>
-              </FadeIn>
-              <FadeIn delay={0.5} y={25}>
-                <p className="mt-8 max-w-xl text-lg leading-8 text-[#9ab0b0] sm:text-xl">Building Intelligent Enterprise Experiences.<br />Transforming SAP Workflows with AI.</p>
-              </FadeIn>
-              <FadeIn delay={0.65} y={20} className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <Magnet padding={80} strength={5}>
-                  <a href="#projects" className="cta-primary inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-[#dff7f2] px-5 text-sm font-semibold text-[#0a1719] shadow-[0_12px_30px_rgba(119,223,192,.14)] hover:bg-white">View selected work <ArrowDown size={16} aria-hidden="true" /></a>
-                </Magnet>
-                <Magnet padding={80} strength={5}>
-                  <a href="/K_Sairam_Resume.pdf" download className="cta-primary inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-[rgba(194,224,222,.2)] bg-[rgba(194,224,222,.05)] px-5 text-sm font-semibold text-[#dff7f2] hover:border-[rgba(119,223,192,.55)] hover:bg-[rgba(119,223,192,.08)]">Download resume <Download size={16} aria-hidden="true" /></a>
-                </Magnet>
-              </FadeIn>
-            </div>
-            <FadeIn delay={0.5} x={40} y={0} className="hidden lg:block">
-              <div className="glass glass-interactive relative overflow-hidden rounded-[2rem] p-6 shadow-[0_30px_80px_rgba(0,0,0,.3)]">
-                <div className="mb-8 flex items-center justify-between border-b hairline pb-4 font-mono text-[10px] uppercase tracking-[.16em] text-[#769091]"><span>System / Sairam</span><span>01—04</span></div>
-                <div className="space-y-3">
-                  {['SAP B1 Copilot', 'WhatsApp approvals', 'HANA optimization', 'ASP.NET MVC portals'].map((item, index) => (
-                    <FadeIn key={item} delay={0.7 + index * 0.08} y={15}>
-                      <div data-testid={`card-capability-${index + 1}`} className="group flex items-center justify-between rounded-2xl border border-[rgba(194,224,222,.11)] bg-[rgba(5,18,21,.62)] p-4 transition-all duration-300 hover:border-[rgba(119,223,192,.35)] hover:bg-[rgba(5,18,21,.8)]">
-                        <div><p className="font-mono text-[10px] text-[#769091]">CAPABILITY 0{index + 1}</p><p className="mt-1 text-sm font-semibold text-[#dff7f2]">{item}</p></div><ArrowUpRight size={17} className="text-[#769091] transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-[#77dfc0]" aria-hidden="true" />
-                      </div>
-                    </FadeIn>
-                  ))}
-                </div>
-                <div className="mt-7 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[.14em] text-[#77dfc0]"><span className="size-1.5 rounded-full bg-[#77dfc0]" />Enterprise-grade by default</div>
-              </div>
-            </FadeIn>
-          </div>
+        <motion.div style={{ y: heroY }} className="relative z-10 mx-auto flex w-full max-w-[1000px] flex-col items-center text-center">
+          <FadeIn delay={0.15} y={20}>
+            <p className="mb-7 inline-flex items-center gap-2 rounded-full border border-[rgba(119,223,192,.26)] bg-[rgba(119,223,192,.06)] px-4 py-2 font-mono text-[10px] uppercase tracking-[.14em] text-[#9fe9d0]">
+              <span className="status-dot" />Available for intelligent enterprise systems
+            </p>
+          </FadeIn>
+          <FadeIn delay={0.3} y={40} className="w-full">
+            <p className="eyebrow justify-center mb-5">AI-enabled full stack engineer</p>
+            <h1 data-testid="text-name" className="display mx-auto max-w-4xl text-[clamp(3.6rem,10vw,8.8rem)] font-semibold leading-[.86] tracking-[-.08em] text-[#eaf9f5]">
+              Kalakonda<br />
+              <span className="gradient-text-shimmer">Sairam<span className="text-[#ffbc6e]" style={{ WebkitTextFillColor: '#ffbc6e' }}>.</span></span>
+            </h1>
+          </FadeIn>
+          <FadeIn delay={0.5} y={25}>
+            <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[#9ab0b0] sm:text-xl">
+              Building Intelligent Enterprise Experiences.<br />Transforming SAP Workflows with AI.
+            </p>
+          </FadeIn>
+          <FadeIn delay={0.65} y={20} className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Magnet padding={80} strength={5}>
+              <a href="#projects" className="cta-primary inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-[#dff7f2] px-6 text-sm font-semibold text-[#0a1719] shadow-[0_12px_30px_rgba(119,223,192,.14)] hover:bg-white">
+                View selected work <ArrowDown size={16} aria-hidden="true" />
+              </a>
+            </Magnet>
+            <Magnet padding={80} strength={5}>
+              <a href="/K_Sairam_Resume.pdf" download className="cta-primary inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-[rgba(194,224,222,.2)] bg-[rgba(194,224,222,.05)] px-6 text-sm font-semibold text-[#dff7f2] hover:border-[rgba(119,223,192,.55)] hover:bg-[rgba(119,223,192,.08)]">
+                Download resume <Download size={16} aria-hidden="true" />
+              </a>
+            </Magnet>
+          </FadeIn>
           <FadeIn delay={0.9} y={10}>
-            <div className="mt-20 flex items-center gap-4 text-[#769091]"><span className="scroll-cue h-px w-12 origin-left bg-[#77dfc0]" /><span className="font-mono text-[10px] uppercase tracking-[.16em]">Scroll to explore</span></div>
+            <div className="mt-16 flex items-center justify-center gap-4 text-[#769091]">
+              <span className="scroll-cue h-px w-12 origin-left bg-[#77dfc0]" />
+              <span className="font-mono text-[10px] uppercase tracking-[.16em]">Scroll to explore</span>
+              <span className="scroll-cue h-px w-12 origin-right bg-[#77dfc0]" />
+            </div>
           </FadeIn>
         </motion.div>
       </section>

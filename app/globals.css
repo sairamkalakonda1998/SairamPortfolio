@@ -50,6 +50,7 @@
 .section-wrap { position:relative; z-index:2; max-width: 1240px; margin:0 auto; padding: 7rem 2rem; }
 .eyebrow { display:flex; align-items:center; gap:.7rem; color:#77dfc0; font: 500 .7rem/1 var(--app-font-mono); letter-spacing:.16em; text-transform:uppercase; }
 .eyebrow::before { content:""; width:2rem; height:1px; background:#77dfc0; }
+.eyebrow.justify-center::after { content:""; width:2rem; height:1px; background:#77dfc0; }
 .display { font-family:var(--app-font-serif); }
 .hairline { border-color: rgba(194, 224, 222, .15); }
 .glass { border:1px solid rgba(194, 224, 222, .13); background:rgba(17, 34, 39, .54); backdrop-filter: blur(18px); }
