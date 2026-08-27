@@ -353,11 +353,11 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 
-# Backup folder for Package Reference Convert tool in Visual Studio 2017
-MigrationBackup/
+# Next.js
+.next/
+out/
+build/
+dist/
+*.log
+.DS_Store
 
-# Ionide (cross platform F# VS Code tools) working folder
-.ionide/
-
-# Fody - auto-generated XML schema
-FodyWeavers.xsd.next
