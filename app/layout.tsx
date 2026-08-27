@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Kalakonda Sairam | AI-Enabled Full Stack Engineer",
+  title: "Kalakonda Sairam | Software Developer (.NET, APIs & AI-Assisted Engineering)",
   description:
-    "Premium single-page portfolio for Kalakonda Sairam, an AI-enabled full stack engineer specializing in ASP.NET MVC, Angular, SAP Business One, and AI integrations."
+    "Portfolio of Kalakonda Sairam — Software Developer with 4+ years of experience specializing in C#, ASP.NET MVC, SAP HANA SQL, and AI-assisted engineering with Codex & Antigravity."
 };
 
 export default function RootLayout({

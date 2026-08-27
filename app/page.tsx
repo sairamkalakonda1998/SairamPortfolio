@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion';
 import {
   ArrowDown, ArrowUpRight, BrainCircuit, Check, Clipboard, Code2,
-  DatabaseZap, Download, Gauge, Linkedin, Mail, Menu, MessageCircle, Phone,
+  DatabaseZap, Download, Gauge, GraduationCap, Linkedin, Mail, Menu, MessageCircle, Phone,
   ServerCog, Sparkles, Trophy, Workflow, Wrench, X, Zap
 } from 'lucide-react';
 import { type LucideIcon } from 'lucide-react';
@@ -18,6 +18,7 @@ const navItems = [
   { label: 'Experience', id: 'experience' },
   { label: 'Projects', id: 'projects' },
   { label: 'Skills', id: 'skills' },
+  { label: 'Education', id: 'education' },
   { label: 'Contact', id: 'contact' },
 ];
 
@@ -31,24 +32,27 @@ const stats = [
 const experience = [
   {
     company: '10X Software Solutions',
-    role: 'Technical Consultant',
+    role: 'Technical Consultant (Web Developer)',
     period: 'Aug 2023 — Present',
     points: [
-      'Integrated AI Copilot within SAP B1 applications.',
-      'Built WhatsApp approval bots.',
-      'Developed ESS Portal using ASP.NET MVC and SAP HANA.',
-      'Optimized HANA procedures improving performance by 30%.',
+      'Developed, tested, and maintained .NET components, internal tools, and REST APIs across the SAP B1 ecosystem applying object-oriented design patterns.',
+      'Used AI coding tools (Codex, Antigravity) to draft code, generate tests, and produce documentation with strict output validation for correctness and security.',
+      'Architected and integrated an AI Copilot into SAP B1 web applications and built a WhatsApp bot for real-time approvals, automated reporting, and alerts.',
+      'Leading end-to-end development of an Employee Self-Service (ESS) Portal (ASP.NET MVC + SAP HANA) with cross-functional remote teams.',
+      'Designed database schemas and refined HANA stored procedures and queries, improving query response time by 30%.',
+      'Implemented unit tests and automated testing practices to catch defects early, participating in code reviews to reduce production issues.',
+      'Built responsive, accessible enterprise UI components using Syncfusion and jQuery event delegation.',
     ],
   },
   {
     company: 'Wipro Limited',
-    role: 'Project Engineer',
+    role: 'Project Engineer (Web Developer)',
     period: 'Mar 2021 — Nov 2022',
     points: [
-      'Developed Commercial LRD platform.',
-      'Reduced server resource consumption by 15%.',
-      'Improved platform stability and performance.',
-      'Worked within Agile delivery environments.',
+      'Designed and optimized backend services using WCF and Entity Framework, reducing server resource consumption by 15%.',
+      'Facilitated Agile requirement-gathering sessions, translating user stories and business requirements into production software within established timelines.',
+      'Spearheaded development of the Commercial LRD (Microsoft Store Checklist Platform), improving operational output by 25%.',
+      'Built and maintained high-performance web applications, troubleshooting issues across environments to increase platform stability and reduce page load times.',
     ],
   },
 ];
@@ -106,19 +110,19 @@ const projects: Array<{
 ];
 
 const skills: Array<{ category: string; icon: LucideIcon; items: string[] }> = [
-  { category: 'Backend', icon: ServerCog, items: ['C#', 'ASP.NET MVC', 'Python', 'Java'] },
-  { category: 'Frontend', icon: Code2, items: ['Angular', 'JavaScript', 'HTML', 'CSS', 'Bootstrap', 'jQuery'] },
-  { category: 'Database', icon: DatabaseZap, items: ['SAP HANA SQL', 'SQL Server', 'MySQL'] },
-  { category: 'Integrations', icon: Workflow, items: ['SAP B1 Service Layer', 'AI Copilot', 'WhatsApp Business API'] },
-  { category: 'Tools', icon: Wrench, items: ['Git', 'VS Code', 'SAP B1 Studio', 'Postman'] },
+  { category: 'Programming Languages', icon: Code2, items: ['C#', 'Python', 'Java', 'JavaScript'] },
+  { category: 'Web & API Development', icon: ServerCog, items: ['ASP.NET MVC', '.NET Core', 'WCF', 'SAP B1 Service Layer (REST APIs)', 'HTML', 'CSS', 'Bootstrap', 'jQuery'] },
+  { category: 'Database & Data', icon: DatabaseZap, items: ['SAP HANA SQL', 'SQL Server', 'MySQL', 'SQLScript', 'Database Schema Design'] },
+  { category: 'AI-Assisted Development', icon: BrainCircuit, items: ['Codex', 'Antigravity', 'AI Copilot Integration', 'AI-Output Validation & Review'] },
+  { category: 'Testing & Version Control', icon: Wrench, items: ['Git', 'Unit Testing', 'Automated Testing', 'Debugging & Troubleshooting'] },
+  { category: 'Development Practices', icon: Workflow, items: ['Object-Oriented Design', 'Architectural Design Patterns', 'Agile', 'WPF'] },
 ];
 
 const achievements = [
-  ['Best Performer of the Quarter', Trophy],
-  ['AI Copilot implementation success', BrainCircuit],
-  ['Enterprise automation initiatives', Workflow],
-  ['Scalable architecture improvements', Sparkles],
-  ['Performance optimization achievements', Gauge],
+  ['AI-Assisted Engineering: Production AI Copilot & WhatsApp automation features in SAP B1', BrainCircuit],
+  ['Intelligent Reporting: Automated multi-format reporting tool integrated with SAP HANA', DatabaseZap],
+  ['Scalability: Refined architecture to support a 50% increase in user traffic', Sparkles],
+  ['Best Performer of the Quarter: Awarded at 10X Software Solutions for project productivity', Trophy],
 ] as const;
 
 /* ── Sticky Project Card Component ────────────────────────── */
@@ -393,18 +397,19 @@ function PortfolioHome() {
         <motion.div style={{ y: heroY }} className="relative z-10 mx-auto flex w-full max-w-[1000px] flex-col items-center text-center">
           <FadeIn delay={0.15} y={20}>
             <p className="mb-7 inline-flex items-center gap-2 rounded-full border border-[rgba(119,223,192,.26)] bg-[rgba(119,223,192,.06)] px-4 py-2 font-mono text-[10px] uppercase tracking-[.14em] text-[#9fe9d0]">
-              <span className="status-dot" />Available for intelligent enterprise systems
+              <span className="status-dot" />Available for .NET, APIs &amp; AI-Assisted Engineering
             </p>
           </FadeIn>
           <FadeIn delay={0.3} y={40} className="w-full">
-            <p className="eyebrow justify-center mb-5">AI-enabled full stack engineer</p>
+            <p className="eyebrow justify-center mb-5">Software Developer · .NET &amp; AI-Assisted Engineering</p>
             <h1 data-testid="text-name" className="display mx-auto w-full max-w-5xl text-[clamp(1.85rem,7.2vw,6.4rem)] font-semibold leading-[1.08] tracking-[-.06em] text-[#eaf9f5] whitespace-nowrap">
               Kalakonda <span className="gradient-text-shimmer">Sairam<span className="text-[#ffbc6e]" style={{ WebkitTextFillColor: '#ffbc6e' }}>.</span></span>
             </h1>
           </FadeIn>
           <FadeIn delay={0.5} y={25}>
             <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[#9ab0b0] sm:text-xl">
-              Building Intelligent Enterprise Experiences.<br />Transforming SAP Workflows with AI.
+              Building Enterprise Applications, Scalable APIs &amp; Automated Workflows.<br />
+              Specializing in C#, ASP.NET MVC, SAP HANA &amp; AI-Assisted Engineering.
             </p>
           </FadeIn>
           <FadeIn delay={0.65} y={20} className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -431,11 +436,11 @@ function PortfolioHome() {
 
       {/* ── About Section ─────────────────────────────────── */}
       <section id="about" className="section-wrap">
-        <SectionHeading eyebrow="About / 01" title="Enterprise engineering with an AI-first operating model." note="Reliable architecture, practical automation, measurable gains." />
-        <div className="grid gap-12 lg:grid-cols-[.9fr_1.1fr] lg:gap-20">
+        <SectionHeading eyebrow="About / 01" title="Enterprise engineering with an AI-assisted development workflow." note="Tested, documented, and maintainable software architectures." />
+        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
           <FadeIn>
             <p data-testid="text-biography" className="text-xl leading-9 text-[#a9bcbc] sm:text-2xl">
-              Kalakonda Sairam is an AI-enabled full stack engineer with 4+ years of experience delivering enterprise-grade solutions across ASP.NET MVC, Angular, SAP Business One, and SAP HANA. His work connects reliable application architecture with practical AI Copilot implementations, workflow automation, and measurable performance gains.
+              Developer with 4+ years of experience designing, building, and maintaining software components, APIs, and internal tools using C#, ASP.NET MVC, and Entity Framework, with a strong foundation in object-oriented design, architectural patterns, and database schema development across SAP HANA SQL and SQL Server. Experienced integrating AI-assisted coding tools (Codex, Antigravity) into daily development work to accelerate code drafts, test generation, and documentation, while validating every output for correctness, security, and maintainability before use.
             </p>
           </FadeIn>
           <div className="grid grid-cols-2 gap-x-10 gap-y-10 lg:pt-2">
@@ -460,11 +465,20 @@ function PortfolioHome() {
             <FadeIn key={item.company} delay={index * 0.15} x={-30} y={0} className="relative md:pl-14">
               <span className="absolute left-0 top-8 hidden size-4 rounded-full border-2 border-[#77dfc0] bg-[#071014] md:block" />
               <article data-testid={`card-experience-${index}`} className="glass glass-interactive rounded-[1.75rem] p-6 sm:p-8">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div><p className="font-mono text-[10px] uppercase tracking-[.16em] text-[#77dfc0]">0{index + 1} / {item.role}</p><h3 className="display mt-3 text-3xl font-semibold tracking-[-.04em] text-[#eaf9f5]">{item.company}</h3></div><p className="w-fit rounded-full border border-[rgba(194,224,222,.17)] px-3 py-2 font-mono text-[10px] text-[#8da7a7]">{item.period}</p></div>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-[.16em] text-[#77dfc0]">0{index + 1} / {item.role}</p>
+                    <h3 className="display mt-3 text-3xl font-semibold tracking-[-.04em] text-[#eaf9f5]">{item.company}</h3>
+                  </div>
+                  <p className="w-fit rounded-full border border-[rgba(194,224,222,.17)] px-3 py-2 font-mono text-[10px] text-[#8da7a7]">{item.period}</p>
+                </div>
                 <ul className="mt-8 grid gap-4 sm:grid-cols-2">
                   {item.points.map((point, pi) => (
-                    <FadeIn key={point} delay={0.1 + pi * 0.08} y={12}>
-                      <li data-testid={`text-experience-point-${index}-${pi}`} className="flex gap-3 text-sm leading-6 text-[#a9bcbc]"><Zap size={15} className="mt-1 shrink-0 text-[#ffbc6e]" aria-hidden="true" />{point}</li>
+                    <FadeIn key={point} delay={0.1 + pi * 0.05} y={12}>
+                      <li data-testid={`text-experience-point-${index}-${pi}`} className="flex gap-3 text-sm leading-6 text-[#a9bcbc]">
+                        <Zap size={15} className="mt-1 shrink-0 text-[#ffbc6e]" aria-hidden="true" />
+                        {point}
+                      </li>
                     </FadeIn>
                   ))}
                 </ul>
@@ -502,7 +516,7 @@ function PortfolioHome() {
 
       {/* ── Skills Section ────────────────────────────────── */}
       <section id="skills" className="section-wrap border-t hairline">
-        <SectionHeading eyebrow="Capabilities / 04" title="A practical stack for SAP-aware, AI-enabled product engineering." note="Deep where it matters. Comfortable across the whole system." />
+        <SectionHeading eyebrow="Capabilities / 04" title="A comprehensive technical stack for .NET, APIs &amp; AI-assisted development." note="Object-oriented design, deep database engineering, and reliable automation." />
         <FadeIn>
           <div className="overflow-hidden rounded-[2rem] border border-[rgba(194,224,222,.13)] bg-[rgba(17,34,39,.42)] backdrop-blur-[18px]">
             {skills.map((skill, index) => {
@@ -510,7 +524,7 @@ function PortfolioHome() {
               return (
                 <FadeIn key={skill.category} delay={index * 0.08} y={15}>
                   <div className={`flex flex-col gap-5 px-7 py-6 sm:flex-row sm:items-center sm:gap-8 sm:px-9 sm:py-7 ${index < skills.length - 1 ? 'border-b border-[rgba(194,224,222,.1)]' : ''}`}>
-                    <div className="flex shrink-0 items-center gap-3 sm:w-44">
+                    <div className="flex shrink-0 items-center gap-3 sm:w-56">
                       <span className="grid size-9 place-items-center rounded-xl border border-[rgba(119,223,192,.2)] bg-[rgba(119,223,192,.06)] text-[#77dfc0]">
                         <Icon size={16} aria-hidden="true" />
                       </span>
@@ -534,7 +548,7 @@ function PortfolioHome() {
       {/* ── Achievements Section ──────────────────── */}
       <section id="achievements" className="section-wrap border-t hairline">
         <SectionHeading eyebrow="Recognition / 05" title="Outcomes shaped by measurable engineering impact." />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {achievements.map(([achievement, Icon], index) => (
             <FadeIn key={achievement} delay={index * 0.08} y={25} scale={0.95}>
               <article data-testid={`card-achievement-${index}`} className="achievement-card glass group relative min-h-[190px] overflow-hidden rounded-[1.5rem] p-5">
@@ -547,9 +561,31 @@ function PortfolioHome() {
         </div>
       </section>
 
+      {/* ── Education Section ─────────────────────────────── */}
+      <section id="education" className="section-wrap border-t hairline">
+        <SectionHeading eyebrow="Education / 06" title="Academic foundation in computer science &amp; engineering." />
+        <FadeIn>
+          <div className="glass rounded-[2rem] p-8 sm:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="flex items-start gap-5">
+              <div className="grid size-14 shrink-0 place-items-center rounded-2xl border border-[rgba(119,223,192,.3)] bg-[rgba(119,223,192,.08)] text-[#77dfc0]">
+                <GraduationCap size={28} aria-hidden="true" />
+              </div>
+              <div>
+                <p className="font-mono text-[11px] uppercase tracking-[.16em] text-[#77dfc0]">Bachelor of Technology</p>
+                <h3 className="display mt-1 text-2xl sm:text-3xl font-semibold text-[#eaf9f5]">Computer Science and Engineering</h3>
+                <p className="mt-2 text-base text-[#9ab0b0]">Kamala Institute of Technology and Science, Karimnagar</p>
+              </div>
+            </div>
+            <div className="w-fit rounded-full border border-[rgba(194,224,222,.2)] bg-[rgba(194,224,222,.06)] px-5 py-2.5 font-mono text-xs text-[#dff7f2]">
+              2016 — 2020
+            </div>
+          </div>
+        </FadeIn>
+      </section>
+
       {/* ── Contact Section ───────────────────────────────── */}
       <section id="contact" className="section-wrap border-t hairline pb-16">
-        <SectionHeading eyebrow="Contact / 06" title="Let's build something intelligent." note="Good systems begin with a clear problem and a direct conversation." />
+        <SectionHeading eyebrow="Contact / 07" title="Let's build something intelligent." note="Good systems begin with a clear problem and a direct conversation." />
         <div className="grid gap-7 lg:grid-cols-2 lg:items-stretch">
           <FadeIn x={-30} y={0}>
             <div className="contact-cta relative flex h-full flex-col justify-between overflow-hidden rounded-[2rem] p-8 sm:p-10">
@@ -559,7 +595,7 @@ function PortfolioHome() {
                   <span className="font-mono text-[10px] uppercase tracking-[.16em] text-[#0a1719]/50">Open to opportunities</span>
                 </div>
                 <h3 className="display max-w-lg text-2xl font-semibold leading-[1.2] tracking-[-.04em] text-[#0a1719] sm:text-[1.75rem]">
-                  Available for enterprise full-stack engineering, SAP B1 extensions, AI copilots, and workflow automation.
+                  Available for .NET development, REST APIs, SAP B1 integrations, and AI-assisted software engineering.
                 </h3>
               </div>
               <Magnet padding={100} strength={4}>
